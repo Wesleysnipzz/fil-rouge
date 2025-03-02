@@ -1,0 +1,43 @@
+%% filepath: /home/manticoriculare/Documents/fil-rouge/FilRouge402/uml/diagrame_class.mmd
+classDiagram
+    class Forme {
+      - int _valeur
+      + Forme(int valeur)
+      + getPerimetre() double
+      + getAire() double
+    }
+    
+    class Triangle {
+      + double T
+      + Triangle(double l)
+      + getPerimetre() double
+      + getAire() double
+    }
+    Forme <|-- Triangle
+
+    class Cercle {
+      + double R
+      + Cercle(double r)
+      + getPerimetre() double
+      + getAire() double
+    }
+    Forme <|-- Cercle
+
+    class Carre {
+      + double C
+      + Carre(double c)
+      + getPerimetre() double
+      + getAire() double
+    }
+    Forme <|-- Carre
+
+    class User {
+      - int Age
+      - string Mail
+      - string FirstName
+      - string LastName
+      + User()
+      + User(int age, string mail, string firstName, string lastName)
+      + GetUserName() string
+      + Birthday() void
+    }
