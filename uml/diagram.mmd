@@ -1,14 +1,11 @@
+%%{init: {'flowchart': {'nodeSpacing': 10, 'rankSpacing': 10}}}%%
 flowchart TD
-    
-    
     START(( ))
     style START fill:#000,stroke:#000,stroke-width:1px,color:#fff,width:90px,height:90px
-    
-    
+
     END(( ))
     style END fill:#fff,stroke:#000,stroke-width:1px,width:90px,height:90px
 
-    
     A[Afficher interface & règles]
     B[Start]
     C[blanc ou noir]
@@ -23,14 +20,13 @@ flowchart TD
     N[Redémarrer partie]
     O[Début du tour]
 
-    
     START --> A
     A --> B
     B --> C
     C --> D
-    D --> E
+    D ---> E
     E --> F
-    F -- Oui --> G
+    F --- Oui --> G
     G --> H
     H --> I
     I --> J
@@ -38,7 +34,7 @@ flowchart TD
     M -- Oui --> N
     N --> O
     M -- Non --> END
-    J -- Non --> END
+    J -- Non --> D
     F -- Non --> D
     O --> END
 
@@ -49,4 +45,3 @@ flowchart TD
 
     classDef action fill:#F0F8FF,stroke:#4682B4,stroke-width:2px;
     class A,B,C,D,E,G,H,I,N,O action;
-
