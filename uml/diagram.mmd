@@ -1,0 +1,47 @@
+%%{init: {'flowchart': {'nodeSpacing': 10, 'rankSpacing': 10}}}%%
+flowchart TD
+    START(( ))
+    style START fill:#000,stroke:#000,stroke-width:1px,color:#fff,width:90px,height:90px
+
+    END(( ))
+    style END fill:#fff,stroke:#000,stroke-width:1px,width:90px,height:90px
+
+    A[Afficher interface & règles]
+    B[Start]
+    C[blanc ou noir]
+    D[Sélectionner pièce]
+    E[Valider mouvement]
+    F{Mouvement valide ?}
+    G[Exécuter mouvement]
+    H[Vérifier état du jeu]
+    I[Mettre à jour échiquier]
+    J{Partie terminée ?}
+    M{Rejouer ?}
+    N[Redémarrer partie]
+    O[Début du tour]
+
+    START --> A
+    A --> B
+    B --> C
+    C --> D
+    D ---> E
+    E --> F
+    F --- Oui --> G
+    G --> H
+    H --> I
+    I --> J
+    J -- Oui --> M
+    M -- Oui --> N
+    N --> O
+    M -- Non --> END
+    J -- Non --> D
+    F -- Non --> D
+    O --> END
+
+    linkStyle default stroke:#333,stroke-width:2px
+
+    classDef decision fill:#FFE6AA,stroke:#D69000,stroke-width:2px,stroke-dasharray: 5 5;
+    class F,J,M decision;
+
+    classDef action fill:#F0F8FF,stroke:#4682B4,stroke-width:2px;
+    class A,B,C,D,E,G,H,I,N,O action;
