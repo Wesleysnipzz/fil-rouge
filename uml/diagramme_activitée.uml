@@ -1,0 +1,27 @@
+@startuml
+!pragma activityDiagramLegacy
+(*) --> "Afficher interface & règles"
+--> "Cliquer \"Jouer\""
+--> "blanc ou noir"
+--> "Sélectionner pièce"
+--> "Valider mouvement"
+if ("Mouvement valide?") then ("Oui")
+  --> "Exécuter mouvement"
+  --> "Vérifier état du jeu"
+  --> "Mettre à jour échiquier"
+  if ("Partie terminée?") then ("Oui")
+    --> "Afficher résultat"
+    --> "Option rejouer/quitter"
+    if ("Rejouer?") then ("Oui")
+      --> "Redémarrer partie"
+      --> "Début du tour"
+    else ("Non")
+      --> (*)
+    endif
+  else ("Non")
+    --> (*)
+  endif
+else ("Non")
+  --> (*)
+endif
+@enduml

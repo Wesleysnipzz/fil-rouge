@@ -1,0 +1,37 @@
+classDiagram
+    class Forme {
+      
+      - int _valeur
+      + Forme(int valeur)
+      + getPerimetre() double
+      + getAire() double
+    }
+    
+    class Triangle {
+      + double T
+      + Triangle(double l)
+      + getPerimetre() double
+      + getAire() double
+    }
+
+    class Cercle {
+      + double R
+      + Cercle(double r)
+      + getPerimetre() double
+      + getAire() double
+    }
+
+    class Carre {
+      + double C  
+      + Carre(double c)
+      + getPerimetre() double
+      + getAire() double
+    }
+
+    Forme <|-- Triangle : hérite
+    Forme <|-- Cercle : hérite
+    Forme <|-- Carre : hérite
+
+    note for Forme "Classe abstraite servant de base aux formes géométriques."
+
+ 
