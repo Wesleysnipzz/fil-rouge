@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzChess", "EzChess\EzChess.csproj", "{4CDF78C5-FB15-40FE-B38B-62B01B36C9B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", "{AACFC312-ECCB-421F-9441-A453B0669919}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject1\TestProject.csproj", "{36B5A62D-0627-49F9-BA14-C15612306ED1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4CDF78C5-FB15-40FE-B38B-62B01B36C9B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CDF78C5-FB15-40FE-B38B-62B01B36C9B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CDF78C5-FB15-40FE-B38B-62B01B36C9B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CDF78C5-FB15-40FE-B38B-62B01B36C9B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AACFC312-ECCB-421F-9441-A453B0669919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AACFC312-ECCB-421F-9441-A453B0669919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AACFC312-ECCB-421F-9441-A453B0669919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AACFC312-ECCB-421F-9441-A453B0669919}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36B5A62D-0627-49F9-BA14-C15612306ED1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36B5A62D-0627-49F9-BA14-C15612306ED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36B5A62D-0627-49F9-BA14-C15612306ED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36B5A62D-0627-49F9-BA14-C15612306ED1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

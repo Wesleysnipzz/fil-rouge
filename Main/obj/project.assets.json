@@ -1,0 +1,95 @@
+{
+  "version": 3,
+  "targets": {
+    "net9.0": {
+      "EzChess/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/EzChess.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EzChess.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "EzChess/1.0.0": {
+      "type": "project",
+      "path": "../EzChess/EzChess.csproj",
+      "msbuildProject": "../EzChess/EzChess.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net9.0": [
+      "EzChess >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/home/manticoriculare/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/home/manticoriculare/Documents/FilRouge402/EzChess/Main/Main.csproj",
+      "projectName": "Main",
+      "projectPath": "/home/manticoriculare/Documents/FilRouge402/EzChess/Main/Main.csproj",
+      "packagesPath": "/home/manticoriculare/.nuget/packages/",
+      "outputPath": "/home/manticoriculare/Documents/FilRouge402/EzChess/Main/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/manticoriculare/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "projectReferences": {
+            "/home/manticoriculare/Documents/FilRouge402/EzChess/EzChess/EzChess.csproj": {
+              "projectPath": "/home/manticoriculare/Documents/FilRouge402/EzChess/EzChess/EzChess.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.100"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/home/manticoriculare/.dotnet/sdk/9.0.101/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
