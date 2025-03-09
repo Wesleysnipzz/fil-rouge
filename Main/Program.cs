@@ -19,5 +19,6 @@ class Program
 
         Triangle triangle = new Triangle(3);
         Console.WriteLine("Périmètre du triangle : " + triangle.GetPerimetre() + " Aire du triangle : " + triangle.GetAire());
+        // commentaire pour push la branch pro402-5
     }
 }
