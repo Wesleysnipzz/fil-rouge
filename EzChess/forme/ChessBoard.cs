@@ -3,7 +3,7 @@ namespace EzChess.forme
 
     public class ChessBoard : Forme
     {
-        private List<Forme> _mesFormes;
+        private readonly List<Forme> _mesFormes;
 
      
         public ChessBoard() : base(0)

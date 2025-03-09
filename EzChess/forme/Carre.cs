@@ -1,13 +1,8 @@
 namespace EzChess.forme;
 
-public class Carre : Forme
+public class Carre(double cote) : Forme(0)
 {
-    public double Cote { get; set; }
-
-    public Carre(double cote) : base(0)
-    {
-        Cote = cote;
-    }
+    private double Cote { get; set; } = cote;
 
     public override double GetPerimetre()
     {
