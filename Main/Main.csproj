@@ -9,5 +9,8 @@
     <ItemGroup>
         <ProjectReference Include="../EzChess/EzChess.csproj"/>
     </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
+    </ItemGroup>
 
 </Project>

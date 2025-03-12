@@ -5,9 +5,9 @@ public abstract class Forme
 {
     protected int Valeur;
 
-       
-       
-    public Forme(int valeur)
+  
+
+    protected Forme(int valeur)
     {
         Valeur = valeur;
     }
@@ -15,4 +15,8 @@ public abstract class Forme
         
     public abstract double GetPerimetre();
     public abstract double GetAire();
+    
+    
+    
+    
 }

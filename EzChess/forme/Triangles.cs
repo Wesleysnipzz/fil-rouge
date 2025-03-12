@@ -1,13 +1,8 @@
 namespace EzChess.forme;
 
-public class Triangle : Forme
+public class Triangle(double cote) : Forme(0)
 {
-    public double Cote { get; set; }
-
-    public Triangle(double cote) : base(0)
-    {
-        Cote = cote;
-    }
+    private double Cote { get; set; } = cote;
 
     public override double GetPerimetre()
     {

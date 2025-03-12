@@ -1,37 +1,51 @@
 classDiagram
     class Forme {
       
-      - int _valeur
+      - int Valeur
       + Forme(int valeur)
       + getPerimetre() double
       + getAire() double
     }
-    
+
     class Triangle {
-      + double T
-      + Triangle(double l)
-      + getPerimetre() double
-      + getAire() double
+        Getter Setter
+        +Triangle(cote : double)
+        +GetPerimetre()  double
+        +GetAire()  double
     }
 
     class Cercle {
-      + double R
-      + Cercle(double r)
-      + getPerimetre() double
-      + getAire() double
+        Getter Setter
+        +Cercle(rayon : double)
+        +GetPerimetre()  double
+        +GetAire()  double
     }
 
     class Carre {
-      + double C  
-      + Carre(double c)
+        Getter Setter
+        +Carre(cote : double)
+        +GetPerimetre()  double
+        +GetAire()  double
+    }
+    class Rectangle {
+        Getter Setter
+      + double Longueur
+      + double Largeur
+      + Rectangle(double l, double L)
       + getPerimetre() double
       + getAire() double
     }
-
+    class ChessBoard {
+        List~Forme~ _mesFormes
+      + ChessBoard()
+      + AddForme(Forme ) 
+    }
+    ChessBoard <|-- Forme : hérite
     Forme <|-- Triangle : hérite
     Forme <|-- Cercle : hérite
     Forme <|-- Carre : hérite
-
+    Forme <|-- Rectangle : hérite
+    note for ChessBoard "Classe gérant une collection de formes géométriques."
     note for Forme "Classe abstraite servant de base aux formes géométriques."
 
  
