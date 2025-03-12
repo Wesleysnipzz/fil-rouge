@@ -2,7 +2,6 @@
 using EzChess;
 using Xunit;
 using Moq; 
-
 namespace TestProject;
 
 public class UnitTest1
@@ -171,6 +170,19 @@ public class GameManagerTests
 
         
         mockChessBoard.Verify(cb => cb.AjouterForme(It.IsAny<Forme>()), Times.Once());
+    }
+    [Fact]
+    public void Test_GameManager_Construction_With_Parameters()
+    {
+        // Arrange
+        var mockEchiquier = new Dictionary<string, Forme?>();
+        var mockChessBoard = new Mock<ChessBoard>().Object;
+
+        // Act
+        var gameManager = new GameManager(mockEchiquier, mockChessBoard);
+
+        // Assert
+        Assert.NotNull(gameManager);
     }
 
 }
