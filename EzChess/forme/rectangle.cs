@@ -2,8 +2,8 @@ namespace EzChess.forme;
 
 public class Rectangle : Forme
 {
-    public double Longueur { get; set; }
-    public double Largeur { get; set; }
+    private double Longueur { get; set; }
+    private double Largeur { get; set; }
 
     public Rectangle(double longueur, double largeur) : base(0)
     {
