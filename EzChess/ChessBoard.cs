@@ -14,7 +14,7 @@ namespace EzChess
         }
 
         // Ajouter une forme au tableau
-        public void AjouterForme(Forme forme)
+        public virtual void AjouterForme(Forme forme)
         {
             _mesFormes.Add(forme);
         }

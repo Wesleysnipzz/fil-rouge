@@ -1,7 +1,7 @@
-namespace WebApplication1.Models.DTOs;
+namespace EzChess.Dtos;
 
-public struct CercleDto
+public class CercleDto
 {
-    public CercleDto()
-    {
-    }
+    public string Type { get; set; } = "Cercle";
+    public double Rayon { get; set; }
+}

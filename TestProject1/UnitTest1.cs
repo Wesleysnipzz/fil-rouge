@@ -1,6 +1,7 @@
 ﻿using EzChess.forme;
 using EzChess;
 using Xunit;
+using Moq; 
 
 namespace TestProject;
 
@@ -59,8 +60,8 @@ public class UnitTest1
     public void TestChessBoard()
     {
         var chessBoard = new ChessBoard();
-        chessBoard.AjouterForme(new Rectangle(5, 3));
-        chessBoard.AjouterForme(new Cercle(3));
+        chessBoard.AjouterForme(new Rectangle(5, 3)); // on va simuler un mock por remplacer ajouterforme 
+        chessBoard.AjouterForme(new Cercle(3)); // le mock va prendre le relais lors d'un test unitaire
     }
 }
 
@@ -156,4 +157,20 @@ public class GameManagerTests
             Console.SetOut(sortieOriginale);
         }
     }
+    [Fact]
+    public void TestMockAjouter_forme()
+    {
+        
+        var mockChessBoard = new Mock<ChessBoard>();
+
+        
+        var gameManager = new GameManager(chessBoard: mockChessBoard.Object);
+        
+        var carre = new Carre(4);
+        gameManager.PlacerForme("E4", carre);
+
+        
+        mockChessBoard.Verify(cb => cb.AjouterForme(It.IsAny<Forme>()), Times.Once());
+    }
+
 }

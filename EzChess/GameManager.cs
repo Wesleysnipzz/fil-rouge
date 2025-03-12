@@ -5,10 +5,12 @@ namespace EzChess;
 public class GameManager
 {
     private readonly Dictionary<string, Forme?> _echiquier;
+    private readonly ChessBoard? _chessBoard;
 
-    public GameManager()
+    public GameManager(Dictionary<string, Forme?>? echiquier = null, ChessBoard? chessBoard = null)
     {
-        _echiquier = new Dictionary<string, Forme?>();
+        _echiquier = echiquier ?? new Dictionary<string, Forme?>();
+        _chessBoard = chessBoard;
         InitialiserEchiquier();
     }
 
@@ -27,7 +29,11 @@ public class GameManager
 
     public void PlacerForme(string position, Forme forme)
     {
-        if (_echiquier.ContainsKey(position))
+        if (_chessBoard != null)
+        {
+            _chessBoard.AjouterForme(forme);
+        }
+        else if (_echiquier.ContainsKey(position))
         {
             _echiquier[position] = forme;
         }
@@ -46,6 +52,7 @@ public class GameManager
             Console.WriteLine();
         }
     }
+
     public Forme? GetForme(string position)
     {
         if (_echiquier.ContainsKey(position))
@@ -54,5 +61,7 @@ public class GameManager
         }
         return null;
     }
-
 }
+
+    
+
