@@ -1,51 +1,53 @@
 classDiagram
     class Forme {
-      
-      - int Valeur
-      + Forme(int valeur)
-      + getPerimetre() double
-      + getAire() double
+        - int Valeur
+        + Forme(int valeur)
+        + GetPerimetre() double
+        + GetAire() double
     }
 
     class Triangle {
-        Getter Setter
-        +Triangle(cote : double)
-        +GetPerimetre()  double
-        +GetAire()  double
+        + Triangle(double cote)
+        + GetPerimetre() double
+        + GetAire() double
     }
 
     class Cercle {
-        Getter Setter
-        +Cercle(rayon : double)
-        +GetPerimetre()  double
-        +GetAire()  double
+        + Cercle(double rayon)
+        + GetPerimetre() double
+        + GetAire() double
     }
 
     class Carre {
-        Getter Setter
-        +Carre(cote : double)
-        +GetPerimetre()  double
-        +GetAire()  double
+        + Carre(double cote)
+        + GetPerimetre() double
+        + GetAire() double
     }
+
     class Rectangle {
-        Getter Setter
-      + double Longueur
-      + double Largeur
-      + Rectangle(double l, double L)
-      + getPerimetre() double
-      + getAire() double
+        + double Longueur
+        + double Largeur
+        + Rectangle(double l, double L)
+        + GetPerimetre() double
+        + GetAire() double
     }
+
     class ChessBoard {
-        List~Forme~ _mesFormes
-      + ChessBoard()
-      + AddForme(Forme ) 
+        - List~Forme~ _mesFormes
+        + ChessBoard()
+        + AjouterForme(Forme)
+        + AfficherFormes()
     }
-    ChessBoard <|-- Forme : hérite
-    Forme <|-- Triangle : hérite
-    Forme <|-- Cercle : hérite
-    Forme <|-- Carre : hérite
-    Forme <|-- Rectangle : hérite
+
+%% Héritage des formes
+    Forme <|-- Triangle
+    Forme <|-- Cercle
+    Forme <|-- Carre
+    Forme <|-- Rectangle
+
+%% Relation de composition entre ChessBoard et Forme
+    ChessBoard "1" *-- "0..*" Forme
+
+%% Notes explicatives
     note for ChessBoard "Classe gérant une collection de formes géométriques."
     note for Forme "Classe abstraite servant de base aux formes géométriques."
-
- 
