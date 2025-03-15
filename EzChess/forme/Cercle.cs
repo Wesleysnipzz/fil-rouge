@@ -1,6 +1,6 @@
 namespace EzChess.forme;
 
-public class Cercle(double rayon) : Forme(0)
+public class Cercle(double rayon) : Forme(1)
 {
     private double Rayon { get; set; } = rayon;
 

@@ -1,15 +1,9 @@
 namespace EzChess.forme;
 
-public class Rectangle : Forme
+public class Rectangle(double longueur, double largeur) : Forme(1000)
 {
-    private double Longueur { get; set; }
-    private double Largeur { get; set; }
-
-    public Rectangle(double longueur, double largeur) : base(0)
-    {
-        Longueur = longueur;
-        Largeur = largeur;
-    }
+    private double Longueur { get; set; } = longueur;
+    private double Largeur { get; set; } = largeur;
 
     public override double GetPerimetre()
     {

@@ -1,12 +1,10 @@
 namespace WebAPI.Models.DTOs;
 
-public class CarreDto
+public class TriangleDto
 {
     public double Cote { get; set; }
-
-    public CarreDto() { }
-
-    public CarreDto(double cote)
+    public TriangleDto() { }
+    public TriangleDto(double cote)
     {
         Cote = cote;
     }

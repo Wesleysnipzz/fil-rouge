@@ -1,6 +1,6 @@
 namespace EzChess.forme;
 
-public class Triangle(double cote) : Forme(0)
+public class Triangle(double cote) : Forme(9)
 {
     private double Cote { get; set; } = cote;
 

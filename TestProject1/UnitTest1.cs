@@ -59,28 +59,14 @@ public class UnitTest1
     public void TestChessBoard()
     {
         var chessBoard = new ChessBoard();
-        chessBoard.AjouterForme(new Rectangle(5, 3)); // on va simuler un mock por remplacer ajouterforme 
-        chessBoard.AjouterForme(new Cercle(3)); // le mock va prendre le relais lors d'un test unitaire
+        chessBoard.AjouterForme(new Rectangle(5, 3)); 
+        chessBoard.AjouterForme(new Cercle(3)); 
     }
 }
 
 public class GameManagerTests
 {
-    [Fact]
-    public void Test_PlacementForme()
-    {
-        // Arrange
-        var gameManager = new GameManager();
-        var carre = new Carre(4); // Crée un carré de 4 de côté
 
-        // Act
-        gameManager.PlacerForme("A1", carre); // Place le carré à la position A1
-        var result = gameManager.GetForme("A1"); // Récupère la forme de la position A1
-
-        // Assert
-        Assert.NotNull(result); // Vérifie que la forme n'est pas null
-        Assert.IsType<Carre>(result); // Vérifie que c'est bien un carré
-    }
 
     [Fact]
     public void Test_GetForme_CaseVide()
@@ -131,7 +117,8 @@ public class GameManagerTests
         chessBoard.AjouterForme(new Carre(4));
         chessBoard.AjouterForme(new Rectangle(3, 5));
         chessBoard.AjouterForme(new Cercle(2));
-
+        chessBoard.AjouterForme(new Triangle(6));
+        
         var sortieOriginale = Console.Out;
         using var sortieCapturee = new StringWriter();
         Console.SetOut(sortieCapturee);
@@ -184,5 +171,85 @@ public class GameManagerTests
         // Assert
         Assert.NotNull(gameManager);
     }
+    [Fact]
+public void Test_PlacerForme_SuccesAvecMock()
+{
+    // Arrange
+    var mockChessBoard = new Mock<ChessBoard>();
+    var gameManager = new GameManager(chessBoard: mockChessBoard.Object);
+    var carre = new Carre(4);
+    
+    // Act
+    bool resultat = gameManager.PlacerForme("A1", carre);
+    
+    // Assert
+    Assert.True(resultat);
+    mockChessBoard.Verify(cb => cb.AjouterForme(carre), Times.Once());
+}
+
+[Fact]
+public void Test_PlacerForme_EchecCaseOccupee()
+{
+    // Arrange
+    var mockChessBoard = new Mock<ChessBoard>();
+    var gameManager = new GameManager(chessBoard: mockChessBoard.Object);
+    var carre = new Carre(4);
+    var cercle = new Cercle(3);
+    
+    // Occuper la case d'abord
+    gameManager.PlacerForme("A1", carre);
+    
+    // Act
+    bool resultat = gameManager.PlacerForme("A1", cercle);
+    
+    // Assert
+    Assert.False(resultat);
+    mockChessBoard.Verify(cb => cb.AjouterForme(carre), Times.Once());
+    mockChessBoard.Verify(cb => cb.AjouterForme(cercle), Times.Never());
+}
+
+[Fact]
+public void Test_PlacerForme_EchecPositionInvalide()
+{
+    // Arrange
+    var mockChessBoard = new Mock<ChessBoard>();
+    var gameManager = new GameManager(chessBoard: mockChessBoard.Object);
+    var carre = new Carre(4);
+    
+    // Act
+    bool resultat = gameManager.PlacerForme("Z9", carre);
+    
+    // Assert
+    Assert.False(resultat);
+    mockChessBoard.Verify(cb => cb.AjouterForme(It.IsAny<Forme>()), Times.Never());
+}
+
+[Fact]
+public void Test_PlacerForme_AvecCaptureSortieConsole()
+{
+    // Arrange
+    var mockChessBoard = new Mock<ChessBoard>();
+    var gameManager = new GameManager(chessBoard: mockChessBoard.Object);
+    var carre = new Carre(4);
+    
+    var sortieOriginale = Console.Out;
+    using var sortieCapturee = new StringWriter();
+    Console.SetOut(sortieCapturee);
+    
+    try
+    {
+        // Act
+        gameManager.PlacerForme("A1", carre);
+        string resultat = sortieCapturee.ToString();
+        
+        // Assert
+        Assert.Contains("Placement réussi", resultat);
+        Assert.Contains("Carre", resultat);
+    }
+    finally
+    {
+        Console.SetOut(sortieOriginale);
+    }
+}
 
 }

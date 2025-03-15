@@ -1,11 +1,14 @@
-
+using AutoMapper;
+using WebAPI.Models.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Ajoute les services pour les contrôleurs et API
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(); // Active Swagger
+builder.Services.AddSwaggerGen();
+
+// 🔥 Enregistrer AutoMapper 🔥
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
@@ -15,12 +18,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Redirige vers HTTPS si disponible
 app.UseHttpsRedirection();
+app
+var builder = WebApplication.CreateBuilder(args);
+
+// Ajoute cette ligne pour enregistrer AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+builder.Services.AddControllers();
+var app = builder.Build();
 
 app.UseRouting();
-app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

@@ -27,30 +27,59 @@ public class GameManager
         }
     }
 
-    public void PlacerForme(string position, Forme forme)
+    public bool PlacerForme(string position, Forme forme) // place la forme dans gamemanager 
     {
-        if (_chessBoard != null)
+        // Vérifier si la position existe
+        if (!_echiquier.ContainsKey(position))
         {
-            _chessBoard.AjouterForme(forme);
+            Console.WriteLine($"Échec du placement: La position {position} n'existe pas.");
+            return false;
         }
-        else if (_echiquier.ContainsKey(position))
+
+        // Vérifier si la case est déjà occupée
+        if (_echiquier[position] != null)
         {
-            _echiquier[position] = forme;
+            Console.WriteLine($"Échec du placement: La position {position} est déjà occupée par une forme {_echiquier[position]?.GetType().Name}.");
+            return false;
         }
+
+        // Placer la forme
+        _echiquier[position] = forme;
+    
+        // Si ChessBoard existe, l'actualiser aussi
+        _chessBoard?.AjouterForme(forme);
+    
+        // Message de confirmation
+        Console.WriteLine($"Placement réussi: {forme.GetType().Name} placé à la position {position}.");
+        return true;
     }
 
-    public void AfficherEchiquier()
+    public void AfficherEchiquier() // affiche l'échiquier à pas zapper 
     {
         string lettres = "ABCDEFGH";
+        Console.WriteLine("  A B C D E F G H");
+        Console.WriteLine(" +-----------------+");
+    
         for (int i = 8; i >= 1; i--)
         {
+            Console.Write($"{i}|");
             for (int j = 0; j < 8; j++)
             {
                 string position = $"{lettres[j]}{i}";
-                Console.Write(_echiquier[position] == null ? "[ ] " : "[X] ");
+                var forme = _echiquier[position];
+            
+                if (forme == null)
+                    Console.Write(" ·");
+                else
+                {
+                    char type = forme.GetType().Name[0];
+                    Console.Write($"{type}{forme.GetValeur()}");
+                }
             }
-            Console.WriteLine();
+            Console.WriteLine($"|{i}");
         }
+        Console.WriteLine(" +-----------------+");
+        Console.WriteLine("  A B C D E F G H");
     }
 
     public Forme? GetForme(string position)

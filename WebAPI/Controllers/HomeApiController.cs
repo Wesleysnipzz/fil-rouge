@@ -1,20 +1,34 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-namespace WebApplication1.Controllers;
+using EzChess.forme;
+using WebAPI.Models.DTOs;
 
-[ApiController]
-[Route("api/home")]
-public class HomeApiController : ControllerBase
+namespace WebAPI.Controllers
 {
-    private readonly ILogger<HomeApiController> _logger;
-
-    public HomeApiController(ILogger<HomeApiController> logger)
+    [ApiController]
+    [Route("api/home")]
+    public class HomeApiController : ControllerBase
     {
-        _logger = logger;
-    }
+        private readonly ILogger<HomeApiController> _logger;
+        private readonly IMapper _mapper;
 
-    [HttpGet("helloflorent")]
-    public IActionResult Get()
-    {
-        return Ok("Hello Florent");
+        public HomeApiController(ILogger<HomeApiController> logger, IMapper mapper)
+        {
+            _logger = logger;
+            _mapper = mapper;
+        }
+
+        [HttpGet("getcarre")]
+        public IActionResult GetCarre()
+        {
+            // Exemple de création d'un objet Carre
+            var carre = new Carre(5);
+
+            // Mapper l'objet Carre vers le CarreDto
+            var carreDto = _mapper.Map<CarreDto>(carre);
+
+            // Retourner l'objet DTO dans la réponse API
+            return Ok(carreDto);
+        }
     }
 }

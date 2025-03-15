@@ -1,8 +1,16 @@
-namespace EzChess.Dtos;
+namespace WebAPI.Models.DTOs;
+
 
 public class RectangleDto
 {
-    public string Type { get; set; } = "Rectangle";
     public double Longueur { get; set; }
     public double Largeur { get; set; }
+
+    public RectangleDto() { }
+
+    public RectangleDto(double longueur, double largeur)
+    {
+        Longueur = longueur;
+        Largeur = largeur;
+    }
 }
