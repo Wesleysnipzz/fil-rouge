@@ -1,6 +1,6 @@
 namespace EzChess.forme;
 
-public class Carre(double cote) : Forme(0)
+public class Carre(double cote) : Forme(5)
 {
     private double Cote { get; set; } = cote;
 
