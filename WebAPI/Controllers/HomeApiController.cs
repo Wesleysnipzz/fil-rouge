@@ -30,5 +30,36 @@ namespace WebAPI.Controllers
             // Retourner l'objet DTO dans la réponse API
             return Ok(carreDto);
         }
+
+        [HttpGet("getrectangle")]
+        public IActionResult GetRectangle()
+        {
+            var rectangle = new Rectangle(6, 4);
+            var rectangleDto = _mapper.Map<RectangleDto>(rectangle);
+            return Ok(rectangleDto);
+        }
+
+        [HttpGet("getcercle")]
+        public IActionResult GetCercle()
+        {
+            var cercle = new Cercle(3);
+            var cercleDto = _mapper.Map<CercleDto>(cercle);
+            return Ok(cercleDto);
+        }
+        [HttpGet("cercle/{rayon}")]
+        public IActionResult GetCercleWithParam(double rayon)
+        {
+            var cercle = new Cercle(rayon);
+            var cercleDto = _mapper.Map<CercleDto>(cercle);
+            return Ok(cercleDto);
+        }
+
+        [HttpGet("gettriangle")]
+        public IActionResult GetTriangle()
+        {
+            var triangle = new Triangle(5);
+            var triangleDto = _mapper.Map<TriangleDto>(triangle);
+            return Ok(triangleDto);
+        }
     }
 }

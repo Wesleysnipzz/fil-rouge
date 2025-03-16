@@ -3,15 +3,17 @@ using WebAPI.Models.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuration des services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 🔥 Enregistrer AutoMapper 🔥
+// Enregistrer AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
+// Configuration du pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -19,15 +21,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app
-var builder = WebApplication.CreateBuilder(args);
-
-// Ajoute cette ligne pour enregistrer AutoMapper
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-builder.Services.AddControllers();
-var app = builder.Build();
-
 app.UseRouting();
 app.MapControllers();
 
