@@ -2,7 +2,7 @@ namespace EzChess.forme;
 
 public class Triangle(double cote) : Forme(9)
 {
-    private double Cote { get; set; } = cote;
+    public double Cote { get; set; } = cote;
 
     public override double GetPerimetre()
     {

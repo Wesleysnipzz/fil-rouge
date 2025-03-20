@@ -2,7 +2,7 @@ namespace EzChess.forme;
 
 public class Cercle(double rayon) : Forme(1)
 {
-    private double Rayon { get; set; } = rayon;
+    public double Rayon { get; set; } = rayon;
 
     public override double GetPerimetre()
     {

@@ -2,7 +2,7 @@ namespace EzChess.forme;
 
 public class Carre(double cote) : Forme(5)
 {
-    private double Cote { get; set; } = cote;
+    public double Cote { get; set; } = cote;
 
     public override double GetPerimetre()
     {

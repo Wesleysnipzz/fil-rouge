@@ -1,3 +1,5 @@
+// Langage: csharp
+// Fichier: WebAPI/Controllers/HomeApiController.cs
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using EzChess.forme;
@@ -11,55 +13,107 @@ namespace WebAPI.Controllers
     {
         private readonly ILogger<HomeApiController> _logger;
         private readonly IMapper _mapper;
+        // Liste statique afin de conserver les formes entre chaque requête
+        private static readonly List<Forme> _formes = new List<Forme>();
 
         public HomeApiController(ILogger<HomeApiController> logger, IMapper mapper)
         {
             _logger = logger;
             _mapper = mapper;
+
+            // Initialisation uniquement si la liste est vide
+            if (!_formes.Any())
+            {
+                _formes.Add(new Carre(5));
+                _formes.Add(new Rectangle(6, 4));
+                _formes.Add(new Cercle(3));
+                _formes.Add(new Triangle(5));
+            }
         }
 
-        [HttpGet("getcarre")]
-        public IActionResult GetCarre()
+        [HttpGet]
+        public IActionResult GetForms()
         {
-            // Exemple de création d'un objet Carre
-            var carre = new Carre(5);
-
-            // Mapper l'objet Carre vers le CarreDto
-            var carreDto = _mapper.Map<CarreDto>(carre);
-
-            // Retourner l'objet DTO dans la réponse API
-            return Ok(carreDto);
+            var formsDto = _formes.Select(f => new FormeDto(f)).ToList();
+            return Ok(formsDto);
         }
 
-        [HttpGet("getrectangle")]
-        public IActionResult GetRectangle()
+        [HttpGet("{id}")]
+        public IActionResult GetFormById(Guid id)
         {
-            var rectangle = new Rectangle(6, 4);
-            var rectangleDto = _mapper.Map<RectangleDto>(rectangle);
-            return Ok(rectangleDto);
+            var forme = _formes.FirstOrDefault(f => f.Id == id);
+            if (forme == null)
+                return NotFound();
+            return Ok(new FormeDto(forme));
         }
 
-        [HttpGet("getcercle")]
-        public IActionResult GetCercle()
+        [HttpPost]
+        public IActionResult CreateForm([FromBody] FormeDto formeDto)
         {
-            var cercle = new Cercle(3);
-            var cercleDto = _mapper.Map<CercleDto>(cercle);
-            return Ok(cercleDto);
-        }
-        [HttpGet("cercle/{rayon}")]
-        public IActionResult GetCercleWithParam(double rayon)
-        {
-            var cercle = new Cercle(rayon);
-            var cercleDto = _mapper.Map<CercleDto>(cercle);
-            return Ok(cercleDto);
+            if (formeDto == null)
+                return BadRequest("Données invalides");
+
+            Forme forme;
+            switch (formeDto.Type.ToLower())
+            {
+                case "carre":
+                    forme = new Carre(formeDto.Cote);
+                    break;
+                case "rectangle":
+                    forme = new Rectangle(formeDto.Longueur, formeDto.Largeur);
+                    break;
+                case "triangle":
+                    forme = new Triangle(formeDto.Cote);
+                    break;
+                case "cercle":
+                    forme = new Cercle(formeDto.Rayon);
+                    break;
+                default:
+                    return BadRequest("Type de forme inconnu");
+            }
+            _formes.Add(forme);
+            return CreatedAtAction(nameof(GetFormById), new { id = forme.Id }, new FormeDto(forme));
         }
 
-        [HttpGet("gettriangle")]
-        public IActionResult GetTriangle()
+        [HttpPut("{id}")]
+        public IActionResult UpdateForm(Guid id, [FromBody] FormeDto formeDto)
         {
-            var triangle = new Triangle(5);
-            var triangleDto = _mapper.Map<TriangleDto>(triangle);
-            return Ok(triangleDto);
+            var existingForm = _formes.FirstOrDefault(f => f.Id == id);
+            if (existingForm == null)
+                return NotFound();
+
+            // Mise à jour selon le type de la forme existante
+            switch (existingForm)
+            {
+                case Carre carre when formeDto.Type.ToLower() == "carre":
+                    carre.Cote = formeDto.Cote;
+                    break;
+                case Rectangle rect when formeDto.Type.ToLower() == "rectangle":
+                    rect.Longueur = formeDto.Longueur;
+                    rect.Largeur = formeDto.Largeur;
+                    break;
+                case Triangle triangle when formeDto.Type.ToLower() == "triangle":
+                    triangle.Cote = formeDto.Cote;
+                    break;
+                case Cercle cercle when formeDto.Type.ToLower() == "cercle":
+                    cercle.Rayon = formeDto.Rayon;
+                    break;
+                default:
+                    return BadRequest("Le type de forme ne correspond pas");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteForm(Guid id)
+        {
+            var forme = _formes.FirstOrDefault(f => f.Id == id);
+            if (forme == null)
+                return NotFound();
+
+            _formes.Remove(forme);
+            return NoContent();
         }
     }
 }

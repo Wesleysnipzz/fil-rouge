@@ -6,8 +6,8 @@ public class RectangleDto
     public double Largeur { get; set; }
     public double Perimetre { get; set; }  // Ajout
     public double Aire { get; set; }       // Ajout
-
-    public RectangleDto() { }
+    
+    public String Type { get; set; } = "Rectangle"; // Ajout
 
     public RectangleDto(double longueur, double largeur)
     {

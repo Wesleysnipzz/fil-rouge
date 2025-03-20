@@ -2,6 +2,7 @@ classDiagram
     class Forme {
         - int Valeur
         + Forme(int valeur)
+        + GetValeur() int
         + GetPerimetre() double
         + GetAire() double
     }
@@ -28,7 +29,7 @@ classDiagram
     }
 
     class Rectangle {
-        Getter ; Setter
+        Getter  ; Setter
         + double Longueur
         + double Largeur
         + Rectangle(double l, double L)

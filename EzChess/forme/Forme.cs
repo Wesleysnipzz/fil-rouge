@@ -2,8 +2,10 @@
 namespace  EzChess.forme;
 
 public abstract class Forme
+
 {
-    protected int Valeur;
+    public Guid Id { get; set; } = Guid.NewGuid();
+    private int Valeur;
 
     protected Forme(int valeur)
     {

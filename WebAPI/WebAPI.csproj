@@ -20,6 +20,13 @@
         <ProjectReference Include="..\EzChess\EzChess.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Models\DTOs\CarreDTO.cs" />
+      <Compile Remove="Models\DTOs\CercleDTO.cs" />
+      <Compile Remove="Models\DTOs\RectangleDTO.cs" />
+      <Compile Remove="Models\DTOs\TriangleDTO.cs" />
+    </ItemGroup>
+
    
 
 </Project>
