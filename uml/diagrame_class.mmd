@@ -1,37 +1,58 @@
 classDiagram
     class Forme {
-      
-      - int _valeur
-      + Forme(int valeur)
-      + getPerimetre() double
-      + getAire() double
+        - int Valeur
+        + Forme(int valeur)
+        + GetValeur() int
+        + GetPerimetre() double
+        + GetAire() double
     }
-    
+
     class Triangle {
-      + double T
-      + Triangle(double l)
-      + getPerimetre() double
-      + getAire() double
+        Getter ; Setter
+        + Triangle(double cote)
+        + GetPerimetre() double
+        + GetAire() double
     }
 
     class Cercle {
-      + double R
-      + Cercle(double r)
-      + getPerimetre() double
-      + getAire() double
+        Getter ; Setter
+        + Cercle(double rayon)
+        + GetPerimetre() double
+        + GetAire() double
     }
 
     class Carre {
-      + double C  
-      + Carre(double c)
-      + getPerimetre() double
-      + getAire() double
+        Getter ; Setter
+        + Carre(double cote)
+        + GetPerimetre() double
+        + GetAire() double
     }
 
-    Forme <|-- Triangle : hérite
-    Forme <|-- Cercle : hérite
-    Forme <|-- Carre : hérite
+    class Rectangle {
+        Getter  ; Setter
+        + double Longueur
+        + double Largeur
+        + Rectangle(double l, double L)
+        + GetPerimetre() double
+        + GetAire() double
+    }
 
+    class ChessBoard {
+        - List~Forme~ _mesFormes
+        + ChessBoard()
+        + AjouterForme(Forme)
+        + AfficherFormes()
+    }
+
+%% Héritage des formes
+    Forme <|-- Triangle
+    Forme <|-- Cercle
+    Forme <|-- Carre
+    Forme <|-- Rectangle
+
+%% Relation de composition entre ChessBoard et Forme
+    ChessBoard "1" *-- "0..*" Forme
+
+%% Notes explicatives
+    note for ChessBoard "Classe gérant une collection de formes géométriques."
     note for Forme "Classe abstraite servant de base aux formes géométriques."
-
- 

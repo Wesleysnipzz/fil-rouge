@@ -1,9 +1,9 @@
-namespace EzChess.forme 
+/* namespace EzChess.forme 
 {
-
+    
     public class ChessBoard : Forme
     {
-        private List<Forme> _mesFormes;
+        private readonly List<Forme> _mesFormes;
 
      
         public ChessBoard() : base(0)
@@ -15,7 +15,8 @@ namespace EzChess.forme
             _mesFormes.Add(new Triangle(4));
             _mesFormes.Add(new Carre(2));
             _mesFormes.Add(new Cercle(3));
-       
+         
+
         }
 
     
@@ -54,6 +55,9 @@ namespace EzChess.forme
             Console.WriteLine("Périmètre total : " + GetPerimetre());
             Console.WriteLine("Aire totale : " + GetAire());
         }
+
     }
 
-}
+
+} 
+*/
