@@ -1,0 +1,42 @@
+[
+  {
+    "id": "c6f9eeff-73e8-43f9-a153-20b1faeda50d",
+    "longueur": 0,
+    "largeur": 0,
+    "cote": 5,
+    "rayon": 0,
+    "perimetre": 20,
+    "aire": 25,
+    "type": "Carre"
+  },
+  {
+    "id": "fd42d333-27af-4d9f-837d-1b90533358a2",
+    "longueur": 6,
+    "largeur": 4,
+    "cote": 0,
+    "rayon": 0,
+    "perimetre": 20,
+    "aire": 24,
+    "type": "Rectangle"
+  },
+  {
+    "id": "4ca35739-3e4e-4b22-800a-8b8e7502e9a5",
+    "longueur": 0,
+    "largeur": 0,
+    "cote": 0,
+    "rayon": 3,
+    "perimetre": 18.84955592153876,
+    "aire": 28.274333882308138,
+    "type": "Cercle"
+  },
+  {
+    "id": "0081786b-3dd5-4e9c-a283-d74d6f1a2fd6",
+    "longueur": 0,
+    "largeur": 0,
+    "cote": 5,
+    "rayon": 0,
+    "perimetre": 15,
+    "aire": 10.825317547305481,
+    "type": "Triangle"
+  }
+]

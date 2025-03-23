@@ -1,5 +1,3 @@
-// Langage: csharp
-// Fichier: WebAPI/Controllers/HomeApiController.cs
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using EzChess.forme;
@@ -34,7 +32,8 @@ namespace WebAPI.Controllers
         [HttpGet]
         public IActionResult GetForms()
         {
-            var formsDto = _formes.Select(f => new FormeDto(f)).ToList();
+            var formsDto = _formes.Select(f => _mapper.Map<FormeDto>(f)).ToList();
+            _logger.LogInformation("Liste des formes récupérée.");
             return Ok(formsDto);
         }
 
@@ -43,15 +42,22 @@ namespace WebAPI.Controllers
         {
             var forme = _formes.FirstOrDefault(f => f.Id == id);
             if (forme == null)
+            {
+                _logger.LogWarning($"Forme avec ID {id} non trouvée.");
                 return NotFound();
-            return Ok(new FormeDto(forme));
+            }
+            _logger.LogInformation($"Forme avec ID {id} récupérée.");
+            return Ok(_mapper.Map<FormeDto>(forme));
         }
 
         [HttpPost]
         public IActionResult CreateForm([FromBody] FormeDto formeDto)
         {
             if (formeDto == null)
+            {
+                _logger.LogWarning("Tentative de création d'une forme avec des données nulles.");
                 return BadRequest("Données invalides");
+            }
 
             Forme forme;
             switch (formeDto.Type.ToLower())
@@ -69,10 +75,12 @@ namespace WebAPI.Controllers
                     forme = new Cercle(formeDto.Rayon);
                     break;
                 default:
+                    _logger.LogWarning($"Type de forme inconnu: {formeDto.Type}");
                     return BadRequest("Type de forme inconnu");
             }
             _formes.Add(forme);
-            return CreatedAtAction(nameof(GetFormById), new { id = forme.Id }, new FormeDto(forme));
+            _logger.LogInformation($"Forme de type {forme.GetType().Name} créée avec ID {forme.Id}.");
+            return CreatedAtAction(nameof(GetFormById), new { id = forme.Id }, _mapper.Map<FormeDto>(forme));
         }
 
         [HttpPut("{id}")]
@@ -80,7 +88,10 @@ namespace WebAPI.Controllers
         {
             var existingForm = _formes.FirstOrDefault(f => f.Id == id);
             if (existingForm == null)
+            {
+                _logger.LogWarning($"Tentative de mise à jour d'une forme inexistante (ID: {id}).");
                 return NotFound();
+            }
 
             // Mise à jour selon le type de la forme existante
             switch (existingForm)
@@ -99,20 +110,26 @@ namespace WebAPI.Controllers
                     cercle.Rayon = formeDto.Rayon;
                     break;
                 default:
+                    _logger.LogWarning($"Type mismatch lors de la mise à jour pour l'ID {id}.");
                     return BadRequest("Le type de forme ne correspond pas");
             }
-
+            _logger.LogInformation($"Forme avec ID {id} mise à jour.");
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public IActionResult DeleteForm(Guid id)
         {
             var forme = _formes.FirstOrDefault(f => f.Id == id);
             if (forme == null)
+            {
+                // Log de débogage avec les IDs existants
+                var existingIds = string.Join(", ", _formes.Select(f => f.Id));
+                _logger.LogWarning($"Tentative de suppression d'une forme inexistante (ID: {id}). IDs existants: {existingIds}");
                 return NotFound();
-
+            }
             _formes.Remove(forme);
+            _logger.LogInformation($"Forme avec ID {id} supprimée.");
             return NoContent();
         }
     }
