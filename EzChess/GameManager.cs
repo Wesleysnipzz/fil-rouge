@@ -1,4 +1,5 @@
 using EzChess.forme;
+using System.Text;
 
 namespace EzChess;
 
@@ -90,7 +91,70 @@ public class GameManager
         }
         return null;
     }
+
+    // --- Début des modifications ---
+
+    public bool SupprimerForme(string position)
+    {
+        position = position.ToUpperInvariant();
+        if (!_echiquier.ContainsKey(position))
+        {
+            Console.WriteLine($"La position {position} n'existe pas sur l'échiquier.");
+            return false;
+        }
+        if (_echiquier[position] == null)
+        {
+            Console.WriteLine($"Aucune forme présente en {position} à supprimer.");
+            return false;
+        }
+        var forme = _echiquier[position];
+        _echiquier[position] = null;
+        Console.WriteLine($"Forme {forme?.GetType().Name} supprimée de la position {position}.");
+        return true;
+    }
+
+    public bool ModifierForme(string position, Forme nouvelleForme)
+    {
+        position = position.ToUpperInvariant();
+        if (!_echiquier.ContainsKey(position))
+        {
+            Console.WriteLine($"La position {position} n'existe pas sur l'échiquier.");
+            return false;
+        }
+        // On remplace la forme existante par la nouvelle
+        _echiquier[position] = nouvelleForme;
+        _chessBoard?.AjouterForme(nouvelleForme);
+        Console.WriteLine($"Forme modifiée à la position {position} par {nouvelleForme.GetType().Name}.");
+        return true;
+    }
+
+    public string ObtenirEchiquier()
+    {
+        StringBuilder sb = new StringBuilder();
+        string lettres = "ABCDEFGH";
+        sb.AppendLine("  A B C D E F G H");
+        sb.AppendLine(" +-----------------+");
+
+        for (int i = 8; i >= 1; i--)
+        {
+            sb.Append($"{i}|");
+            for (int j = 0; j < 8; j++)
+            {
+                string position = $"{lettres[j]}{i}";
+                var forme = _echiquier[position];
+                if (forme == null)
+                    sb.Append(" ·");
+                else
+                {
+                    char type = forme.GetType().Name[0];
+                    sb.Append($"{type}{forme.GetValeur()}");
+                }
+            }
+            sb.AppendLine($"|{i}");
+        }
+        sb.AppendLine(" +-----------------+");
+        sb.AppendLine("  A B C D E F G H");
+        return sb.ToString();
+    }
+    // --- Fin des modifications ---
 }
-
-    
-

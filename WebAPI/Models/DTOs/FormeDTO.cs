@@ -1,8 +1,6 @@
 // Langage: csharp
-// Fichier: WebAPI/Models/DTOs/FormeDto.cs
-using System;
+// Fichier: WebAPI/Models/DTOs/FormeDto.c
 using EzChess.forme;
-using System.Text.Json.Serialization;
 
 namespace WebAPI.Models.DTOs
 {

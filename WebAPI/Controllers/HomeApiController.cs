@@ -6,13 +6,15 @@ using WebAPI.Models.DTOs;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/home")]
+    [Route("Formes")]
     public class HomeApiController : ControllerBase
     {
         private readonly ILogger<HomeApiController> _logger;
         private readonly IMapper _mapper;
         // Liste statique afin de conserver les formes entre chaque requête
         private static readonly List<Forme> _formes = new List<Forme>();
+        // Instance statique de GameManager pour gérer l'échiquier
+        private static readonly EzChess.GameManager _gameManager = new EzChess.GameManager();
 
         public HomeApiController(ILogger<HomeApiController> logger, IMapper mapper)
         {
