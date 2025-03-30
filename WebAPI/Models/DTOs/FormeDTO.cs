@@ -1,5 +1,3 @@
-// Langage: csharp
-// Fichier: WebAPI/Models/DTOs/FormeDto.c
 using EzChess.forme;
 
 namespace WebAPI.Models.DTOs
@@ -13,7 +11,8 @@ namespace WebAPI.Models.DTOs
         public double Rayon { get; set; }
         public double Perimetre { get; set; }
         public double Aire { get; set; }
-        public string Type { get; set; }
+        // Ajout de l'initialisation par défaut pour éviter les avertissements
+        public string Type { get; set; } = string.Empty;
 
         // Constructeur sans paramètre pour permettre la désérialisation.
         public FormeDto() { }

@@ -5,6 +5,8 @@ namespace EzChess;
 
 public class GameManager
 {
+    public static GameManager Instance { get; } = new GameManager();
+    
     private readonly Dictionary<string, Forme?> _echiquier;
     private readonly ChessBoard? _chessBoard;
 
@@ -73,8 +75,8 @@ public class GameManager
                     Console.Write(" ·");
                 else
                 {
-                    char type = forme.GetType().Name[0];
-                    Console.Write($"{type}{forme.GetValeur()}");
+                    // Affiche la position sur le plateau au lieu du type et de la valeur
+                    Console.Write($" {position}");
                 }
             }
             Console.WriteLine($"|{i}");
@@ -146,8 +148,8 @@ public class GameManager
                     sb.Append(" ·");
                 else
                 {
-                    char type = forme.GetType().Name[0];
-                    sb.Append($"{type}{forme.GetValeur()}");
+                    // Affiche la position
+                    sb.Append($" {position}");
                 }
             }
             sb.AppendLine($"|{i}");
