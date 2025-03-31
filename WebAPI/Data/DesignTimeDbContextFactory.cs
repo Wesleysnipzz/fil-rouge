@@ -9,7 +9,7 @@ namespace WebAPI.Data
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             // Mise à jour de la chaîne de connexion pour Docker Compose : Username=user
-            optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=10000;Username=user;Password=123;Database=postgres");
+            optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=10000;Username=user;Password=123;Database=chess");
             return new ApplicationDbContext(optionsBuilder.Options);
         }
     }

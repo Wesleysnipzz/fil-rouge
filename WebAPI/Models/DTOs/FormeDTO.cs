@@ -13,6 +13,7 @@ namespace WebAPI.Models.DTOs
         public double Aire { get; set; }
         // Ajout de l'initialisation par défaut pour éviter les avertissements
         public string Type { get; set; } = string.Empty;
+        public string position { get; set; } = string.Empty;
 
         // Constructeur sans paramètre pour permettre la désérialisation.
         public FormeDto() { }
@@ -24,6 +25,7 @@ namespace WebAPI.Models.DTOs
             Cote = c.Cote;
             Perimetre = c.GetPerimetre();
             Aire = c.GetAire();
+            position = c.position;
         }
 
         public FormeDto(Rectangle r)
@@ -34,6 +36,7 @@ namespace WebAPI.Models.DTOs
             Largeur = r.Largeur;
             Perimetre = r.GetPerimetre();
             Aire = r.GetAire();
+            position = r.position;
         }
 
         public FormeDto(Triangle t)
@@ -43,6 +46,7 @@ namespace WebAPI.Models.DTOs
             Cote = t.Cote;
             Perimetre = t.GetPerimetre();
             Aire = t.GetAire();
+            position = t.position;
         }
 
         public FormeDto(Cercle c)
@@ -52,6 +56,7 @@ namespace WebAPI.Models.DTOs
             Rayon = c.Rayon;
             Perimetre = c.GetPerimetre();
             Aire = c.GetAire();
+            position = c.position;
         }
 
         public FormeDto(Forme forme)
