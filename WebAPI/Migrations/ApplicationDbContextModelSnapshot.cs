@@ -41,13 +41,13 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models.Entities.Placement", b =>
                 {
-                    b.Property<string>("Position")
+                    b.Property<string>("position")
                         .HasColumnType("text");
 
                     b.Property<Guid?>("FormeId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Position");
+                    b.HasKey("position");
 
                     b.HasIndex("FormeId");
 

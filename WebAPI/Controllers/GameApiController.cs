@@ -1,3 +1,4 @@
+using EzChess;
 using Microsoft.AspNetCore.Mvc;
 using EzChess.forme;
 using WebAPI.Models.DTOs;
@@ -14,7 +15,7 @@ namespace WebAPI.Controllers
         public GameApiController(ILogger<GameApiController> logger)
         {
             _logger = logger;
-            _gameManager = EzChess.GameManager.Instance;
+            _gameManager = new GameManager();
         }
 
         [HttpPost("{position}")]
@@ -30,16 +31,16 @@ namespace WebAPI.Controllers
             switch (formeDto.Type.ToLower())
             {
                 case "carre":
-                    forme = new Carre(formeDto.Cote);
+                    forme = new Carre(formeDto.Cote, formeDto.position);
                     break;
                 case "rectangle":
-                    forme = new Rectangle(formeDto.Longueur, formeDto.Largeur);
+                    forme = new Rectangle(formeDto.Longueur, formeDto.Largeur, formeDto.position);
                     break;
                 case "triangle":
-                    forme = new Triangle(formeDto.Cote);
+                    forme = new Triangle(formeDto.Cote, formeDto.position);
                     break;
                 case "cercle":
-                    forme = new Cercle(formeDto.Rayon);
+                    forme = new Cercle(formeDto.Rayon, formeDto.position);
                     break;
                 default:
                     _logger.LogWarning($"Type de forme inconnu: {formeDto.Type}");
@@ -83,16 +84,16 @@ namespace WebAPI.Controllers
             switch (formeDto.Type.ToLower())
             {
                 case "carre":
-                    nouvelleForme = new Carre(formeDto.Cote);
+                    nouvelleForme = new Carre(formeDto.Cote, formeDto.position);
                     break;
                 case "rectangle":
-                    nouvelleForme = new Rectangle(formeDto.Longueur, formeDto.Largeur);
+                    nouvelleForme = new Rectangle(formeDto.Longueur, formeDto.Largeur, formeDto.position);
                     break;
                 case "triangle":
-                    nouvelleForme = new Triangle(formeDto.Cote);
+                    nouvelleForme = new Triangle(formeDto.Cote, formeDto.position);
                     break;
                 case "cercle":
-                    nouvelleForme = new Cercle(formeDto.Rayon);
+                    nouvelleForme = new Cercle(formeDto.Rayon, formeDto.position);
                     break;
                 default:
                     _logger.LogWarning($"Type de forme inconnu: {formeDto.Type}");
@@ -113,6 +114,14 @@ namespace WebAPI.Controllers
         public IActionResult GetBoard()
         {
             var board = _gameManager.ObtenirEchiquier();
+            _logger.LogInformation("Affichage de l'échiquier demandé.");
+            return Ok(board);
+        }
+        
+        [HttpGet("echequier")]
+        public IActionResult GetEchiquier()
+        {
+            var board = _gameManager.GetEchiquier();
             _logger.LogInformation("Affichage de l'échiquier demandé.");
             return Ok(board);
         }

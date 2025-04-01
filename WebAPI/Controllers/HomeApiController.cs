@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
             _logger = logger;
             _mapper = mapper;
             _context = context;
-
+/*
             // Initialisation en base si vide
             if (!_context.Formes.Any())
             {
@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
                 _context.Formes.Add(new Triangle(5));
                 _context.SaveChanges();
             }
-        }
+//*/        }
 
         [HttpGet]
         public IActionResult GetForms()
@@ -66,16 +66,16 @@ namespace WebAPI.Controllers
             switch (formeDto.Type.ToLower())
             {
                 case "carre":
-                    forme = new Carre(formeDto.Cote);
+                    forme = new Carre(formeDto.Cote, formeDto.position);
                     break;
                 case "rectangle":
-                    forme = new Rectangle(formeDto.Longueur, formeDto.Largeur);
+                    forme = new Rectangle(formeDto.Longueur, formeDto.Largeur, formeDto.position);
                     break;
                 case "triangle":
-                    forme = new Triangle(formeDto.Cote);
+                    forme = new Triangle(formeDto.Cote, formeDto.position);
                     break;
                 case "cercle":
-                    forme = new Cercle(formeDto.Rayon);
+                    forme = new Cercle(formeDto.Rayon, formeDto.position);
                     break;
                 default:
                     _logger.LogWarning($"Type de forme inconnu: {formeDto.Type}");

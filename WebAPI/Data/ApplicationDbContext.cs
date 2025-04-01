@@ -61,8 +61,3 @@ namespace WebAPI.Data
         }
     }
 }
-
-// Le DbContext mappe correctement les entités (Forme, Carre, Rectangle, Triangle, Cercle, Placement)
-// et configure bien la relation Placement -> Forme via OnModelCreating.
-// Assurez-vous simplement de mettre à jour la chaîne de connexion (password et database)
-// si nécessaire.

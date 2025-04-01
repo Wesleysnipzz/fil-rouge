@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.OpenApi.Models;
 using WebAPI.Models.Profiles;
 using WebAPI.Data; // Ajoutez le namespace correct pour ApplicationDbContext
@@ -20,6 +19,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddDbContext<ApplicationDbContext>();
 
 var app = builder.Build();
+
+
 
 // Configuration du pipeline HTTP
 if (app.Environment.IsDevelopment())

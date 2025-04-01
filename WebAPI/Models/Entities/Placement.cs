@@ -7,13 +7,14 @@ namespace WebAPI.Models.Entities
 {
     public class Placement
     {
-        [Key] // Clé primaire : définit la position unique sur l'échiquier
+        [Key]
+        // Conserve la correspondance avec la colonne de la base de données
+        [Column("position")]
         public string Position { get; set; } = default!;
         
-        public Guid? FormeId { get; set; }     // Clé étrangère reliant à l'entité Forme
+        public Guid? FormeId { get; set; }
         
-        [ForeignKey("FormeId")] // Association entre Placement et Forme
+        [ForeignKey("FormeId")]
         public Forme Forme { get; set; } = default!;
     }
 }
-
