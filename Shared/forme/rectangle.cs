@@ -1,6 +1,6 @@
-namespace EzChess.forme;
+namespace Shared.forme;
 
-public class Rectangle(double longueur, double largeur) : Forme(1000)
+public class Rectangle(double longueur, double largeur,  string position ) : Forme(1000)
 {
     public double Longueur { get; set; } = longueur;
     public double Largeur { get; set; } = largeur;

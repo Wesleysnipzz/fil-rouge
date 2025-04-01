@@ -1,8 +1,9 @@
-namespace EzChess.forme;
+namespace Shared.forme;
 
-public class Cercle(double rayon) : Forme(1)
+public class Cercle(double rayon, string position) : Forme(1)
 {
     public double Rayon { get; set; } = rayon;
+
 
     public override double GetPerimetre()
     {

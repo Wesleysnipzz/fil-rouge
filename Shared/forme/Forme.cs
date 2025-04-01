@@ -1,20 +1,16 @@
-namespace EzChess.forme;
+namespace Shared.forme;
 
 public abstract class Forme
 {
     public Guid Id { get; set; } = Guid.NewGuid();
-    private int Valeur;
+    public string position { get; set; } = "Z26";
+    private int Valeur { get; set; } = default!;
 
     protected Forme(int valeur)
     {
         Valeur = valeur;
     }
-
-    public int GetValeur()
-    {
-        return Valeur;
-    }
-
+    
     public abstract double GetPerimetre();
     public abstract double GetAire();
     

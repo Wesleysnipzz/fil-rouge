@@ -1,16 +1,16 @@
-namespace EzChess.forme;
+namespace Shared.forme;
 
-public class Triangle(double cote) : Forme(9)
+public class Carre(double cote , string position) : Forme(5)
 {
     public double Cote { get; set; } = cote;
 
     public override double GetPerimetre()
     {
-        return 3 * Cote;
+        return 4 * Cote;
     }
 
     public override double GetAire()
     {
-        return (Math.Sqrt(3) / 4) * Cote * Cote;
+        return Cote * Cote;
     }
 }
