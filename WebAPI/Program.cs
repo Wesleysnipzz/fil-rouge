@@ -16,12 +16,9 @@ builder.Services.AddSwaggerGen(c =>
 
 // Enregistrer AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-// Configuration du contexte de base de données en mémoire
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseInMemoryDatabase("EzChessDB");
-});
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Enregistrement de GameManager pour injection de dépendances
 builder.Services.AddScoped<GameManager>();

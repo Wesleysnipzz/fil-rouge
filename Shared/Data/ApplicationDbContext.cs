@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Shared.forme;
-// Vos entités de formes
 
 namespace Shared.Data
 {
@@ -13,23 +12,16 @@ namespace Shared.Data
         public DbSet<Triangle> Triangles { get; set; }
         public DbSet<Carre> Carres { get; set; }
 
-        // Constructeur par défaut pour EF design-time
-        public ApplicationDbContext() : base(
-            new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseNpgsql("Host=127.0.0.1;Port=10000;Username=user;Password=123;Database=chess")
-                .Options)
-        {
-        }
-
         // Constructeur pour l'injection de dépendances
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        // Configuration de la connexion (au cas où elle ne serait pas déjà configurée)
+        // Configuration de la connexion dans OnConfiguring (si nécessaire)
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // Si jamais la chaîne de connexion n'est pas déjà configurée dans DI
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=10000;Username=user;Password=123;Database=chess");

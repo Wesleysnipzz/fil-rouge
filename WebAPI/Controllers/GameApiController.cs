@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebAPI.Models.DTOs;
 using Shared.forme;
 using Shared.Data;
+using System.Collections.Generic;
 
 namespace WebAPI.Controllers
 {
@@ -11,17 +12,15 @@ namespace WebAPI.Controllers
     {
         private readonly ILogger<GameApiController> _logger;
         private readonly GameManager _gameManager;
-        private readonly ApplicationDbContext _contexte;
 
-        public GameApiController(ILogger<GameApiController> logger, GameManager gameManager, ApplicationDbContext contexte)
+        public GameApiController(ILogger<GameApiController> logger, GameManager gameManager)
         {
             _logger = logger;
             _gameManager = gameManager;
-            _contexte = contexte;
         }
 
         [HttpPost("{position}")]
-        public IActionResult Game(string position, [FromBody] FormeDto formeDto)
+        public IActionResult PlacerForme(string position, [FromBody] FormeDto formeDto)
         {
             if (formeDto == null)
             {
@@ -29,50 +28,26 @@ namespace WebAPI.Controllers
                 return BadRequest("Données invalides");
             }
 
-            Forme forme;
-            switch (formeDto.Type.ToLower())
+            Forme forme = CreerFormeDepuisDto(formeDto, position);
+            if (forme == null)
             {
-                case "carre":
-                    forme = new Carre(formeDto.Cote, formeDto.position);
-                    break;
-                case "rectangle":
-                    forme = new Rectangle(formeDto.Longueur, formeDto.Largeur, formeDto.position);
-                    break;
-                case "triangle":
-                    forme = new Triangle(formeDto.Cote, formeDto.position);
-                    break;
-                case "cercle":
-                    forme = new Cercle(formeDto.Rayon, formeDto.position);
-                    break;
-                default:
-                    _logger.LogWarning($"Type de forme inconnu: {formeDto.Type}");
-                    return BadRequest("Type de forme inconnu");
+                _logger.LogWarning($"Type de forme inconnu: {formeDto.Type}");
+                return BadRequest("Type de forme inconnu");
             }
 
             var placed = _gameManager.PlacerForme(position, forme);
-            
             if (!placed)
             {
                 _logger.LogWarning($"Échec du placement de la forme à la position {position}.");
                 return BadRequest($"Échec du placement sur l'échiquier en {position}");
             }
 
-            // Vérification que la position est bien présente dans la base de données
-            var formeEnregistree = _contexte.Formes
-                .FirstOrDefault(f => f.position.Equals(position.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase));
-            if (formeEnregistree == null)
-            {
-                _logger.LogError($"La position {position} n'est pas présente dans la base de données après placement.");
-                return StatusCode(500, $"Erreur interne : La position {position} n'a pas été enregistrée.");
-            }
-
-            _logger.LogInformation($"Forme enregistrée à la position {formeEnregistree.position} dans la base de données.");
+            _logger.LogInformation($"Forme enregistrée à la position {position}.");
             return Ok("Placement réussi");
-        } // Ajout de la fermeture de la méthode Game
+        }
 
         [HttpDelete("{position}")]
-        
-        public IActionResult DeletePiece(string position)
+        public IActionResult SupprimerForme(string position)
         {
             bool deleted = _gameManager.SupprimerForme(position);
             if (!deleted)
@@ -85,7 +60,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{position}")]
-        public IActionResult UpdatePiece(string position, [FromBody] FormeDto formeDto)
+        public IActionResult ModifierForme(string position, [FromBody] FormeDto formeDto)
         {
             if (formeDto == null)
             {
@@ -93,24 +68,11 @@ namespace WebAPI.Controllers
                 return BadRequest("Données invalides");
             }
 
-            Forme nouvelleForme;
-            switch (formeDto.Type.ToLower())
+            Forme nouvelleForme = CreerFormeDepuisDto(formeDto, position);
+            if (nouvelleForme == null)
             {
-                case "carre":
-                    nouvelleForme = new Carre(formeDto.Cote, formeDto.position);
-                    break;
-                case "rectangle":
-                    nouvelleForme = new Rectangle(formeDto.Longueur, formeDto.Largeur, formeDto.position);
-                    break;
-                case "triangle":
-                    nouvelleForme = new Triangle(formeDto.Cote, formeDto.position);
-                    break;
-                case "cercle":
-                    nouvelleForme = new Cercle(formeDto.Rayon, formeDto.position);
-                    break;
-                default:
-                    _logger.LogWarning($"Type de forme inconnu: {formeDto.Type}");
-                    return BadRequest("Type de forme inconnu");
+                _logger.LogWarning($"Type de forme inconnu: {formeDto.Type}");
+                return BadRequest("Type de forme inconnu");
             }
 
             bool modified = _gameManager.ModifierForme(position, nouvelleForme);
@@ -124,19 +86,28 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("board")]
-        public IActionResult GetBoard()
+        public IActionResult ObtenirEchiquier()
         {
-            var board = _gameManager.ObtenirEchiquier();
+            var echiquier = _gameManager.ObtenirEchiquier();
             _logger.LogInformation("Affichage de l'échiquier demandé.");
-            return Ok(board);
+            return Ok(echiquier);
         }
-        
-        [HttpGet("echequier")]
-        public IActionResult GetEchiquier()
+
+        private Forme CreerFormeDepuisDto(FormeDto formeDto, string position)
         {
-            var board = _gameManager.ObtenirEchiquier();
-            _logger.LogInformation("Affichage de l'échiquier demandé.");
-            return Ok(board);
+            switch (formeDto.Type.ToLower())
+            {
+                case "carre":
+                    return new Carre(formeDto.Cote, position);
+                case "rectangle":
+                    return new Rectangle(formeDto.Longueur, formeDto.Largeur, position);
+                case "triangle":
+                    return new Triangle(formeDto.Cote, position);
+                case "cercle":
+                    return new Cercle(formeDto.Rayon, position);
+                default:
+                    return null;
+            }
         }
     }
 }
