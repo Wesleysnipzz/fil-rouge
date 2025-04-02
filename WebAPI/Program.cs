@@ -1,6 +1,8 @@
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 using WebAPI.Models.Profiles;
-using WebAPI.Data; // Ajoutez le namespace correct pour ApplicationDbContext
+using Shared.Data;
+using Shared.forme; // Pour accéder à GameManager
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,12 +17,16 @@ builder.Services.AddSwaggerGen(c =>
 // Enregistrer AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-// Ajouter le contexte de base de données
-builder.Services.AddDbContext<ApplicationDbContext>();
+// Configuration du contexte de base de données en mémoire
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseInMemoryDatabase("EzChessDB");
+});
+
+// Enregistrement de GameManager pour injection de dépendances
+builder.Services.AddScoped<GameManager>();
 
 var app = builder.Build();
-
-
 
 // Configuration du pipeline HTTP
 if (app.Environment.IsDevelopment())
@@ -33,10 +39,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Redirection HTTP et routage
 app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

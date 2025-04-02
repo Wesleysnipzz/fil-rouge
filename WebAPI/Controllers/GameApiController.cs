@@ -1,7 +1,7 @@
-using EzChess;
 using Microsoft.AspNetCore.Mvc;
-using EzChess.forme;
 using WebAPI.Models.DTOs;
+using Shared.forme;
+using Shared.Data;
 
 namespace WebAPI.Controllers
 {
@@ -10,12 +10,14 @@ namespace WebAPI.Controllers
     public class GameApiController : ControllerBase
     {
         private readonly ILogger<GameApiController> _logger;
-        private readonly EzChess.GameManager _gameManager;
+        private readonly GameManager _gameManager;
+        private readonly ApplicationDbContext _contexte;
 
-        public GameApiController(ILogger<GameApiController> logger)
+        public GameApiController(ILogger<GameApiController> logger, GameManager gameManager, ApplicationDbContext contexte)
         {
             _logger = logger;
-            _gameManager = new GameManager();
+            _gameManager = gameManager;
+            _contexte = contexte;
         }
 
         [HttpPost("{position}")]
@@ -47,18 +49,29 @@ namespace WebAPI.Controllers
                     return BadRequest("Type de forme inconnu");
             }
 
-            bool placed = _gameManager.PlacerForme(position.ToUpperInvariant(), forme);
+            var placed = _gameManager.PlacerForme(position, forme);
+            
             if (!placed)
             {
                 _logger.LogWarning($"Échec du placement de la forme à la position {position}.");
                 return BadRequest($"Échec du placement sur l'échiquier en {position}");
             }
 
-            _logger.LogInformation($"Forme {forme.GetType().Name} placée avec succès à la position {position}.");
-            return Ok($"Forme {forme.GetType().Name} placée en {position}");
-        }
+            // Vérification que la position est bien présente dans la base de données
+            var formeEnregistree = _contexte.Formes
+                .FirstOrDefault(f => f.position.Equals(position.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase));
+            if (formeEnregistree == null)
+            {
+                _logger.LogError($"La position {position} n'est pas présente dans la base de données après placement.");
+                return StatusCode(500, $"Erreur interne : La position {position} n'a pas été enregistrée.");
+            }
+
+            _logger.LogInformation($"Forme enregistrée à la position {formeEnregistree.position} dans la base de données.");
+            return Ok("Placement réussi");
+        } // Ajout de la fermeture de la méthode Game
 
         [HttpDelete("{position}")]
+        
         public IActionResult DeletePiece(string position)
         {
             bool deleted = _gameManager.SupprimerForme(position);
@@ -121,7 +134,7 @@ namespace WebAPI.Controllers
         [HttpGet("echequier")]
         public IActionResult GetEchiquier()
         {
-            var board = _gameManager.GetEchiquier();
+            var board = _gameManager.ObtenirEchiquier();
             _logger.LogInformation("Affichage de l'échiquier demandé.");
             return Ok(board);
         }

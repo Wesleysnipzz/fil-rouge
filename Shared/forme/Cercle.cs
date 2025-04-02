@@ -1,17 +1,15 @@
 namespace Shared.forme;
 
-public class Cercle(double rayon, string position) : Forme(1)
+public class Cercle : Forme
 {
-    public double Rayon { get; set; } = rayon;
+    public double Rayon { get; set; }
 
-
-    public override double GetPerimetre()
+    public Cercle(double rayon, string position) : base(1)
     {
-        return 2 * Math.PI * Rayon;
+        Rayon = rayon;
+        this.position = position; // Affecte la position héritée
     }
 
-    public override double GetAire()
-    {
-        return Math.PI * Rayon * Rayon;
-    }
+    public override double GetPerimetre() => 2 * Math.PI * Rayon;
+    public override double GetAire() => Math.PI * Rayon * Rayon;
 }

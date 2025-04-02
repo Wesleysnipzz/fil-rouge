@@ -9,6 +9,8 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="../EzChess/EzChess.csproj"/>
+    
+        
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Audit.NET" Version="27.5.0" />

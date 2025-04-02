@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Logging;
 using Shared.Data;
-using Shared.Interface;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Shared.forme
 {
-    public class GameManager : IGameManager
+    public class GameManager
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<GameManager> _logger;
@@ -17,7 +18,6 @@ namespace Shared.forme
 
         public bool PlacerForme(string position, Forme forme)
         {
-            // Utiliser la propriété 'position' en minuscule pour correspondre à la définition dans Forme
             forme.position = position.ToUpperInvariant();
             _context.Formes.Add(forme);
             _context.SaveChanges();

@@ -3,7 +3,7 @@ namespace Shared.forme;
 public abstract class Forme
 {
     public Guid Id { get; set; } = Guid.NewGuid();
-    public string position { get; set; } = "Z26";
+    public string position { get; set; } = "ValeurProvisoire";
     private int Valeur { get; set; } = default!;
 
     protected Forme(int valeur)

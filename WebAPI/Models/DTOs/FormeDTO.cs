@@ -1,4 +1,4 @@
-using EzChess.forme;
+using Shared.forme;
 
 namespace WebAPI.Models.DTOs
 {

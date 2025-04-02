@@ -1,17 +1,17 @@
 namespace Shared.forme;
 
-public class Rectangle(double longueur, double largeur,  string position ) : Forme(1000)
+public class Rectangle : Forme
 {
-    public double Longueur { get; set; } = longueur;
-    public double Largeur { get; set; } = largeur;
+    public double Longueur { get; set; }
+    public double Largeur { get; set; }
 
-    public override double GetPerimetre()
+    public Rectangle(double longueur, double largeur, string position) : base(1000)
     {
-        return 2 * (Longueur + Largeur);
+        Longueur = longueur;
+        Largeur = largeur;
+        this.position = position; // Utilise la propriété héritée
     }
 
-    public override double GetAire()
-    {
-        return Longueur * Largeur;
-    }
+    public override double GetPerimetre() => 2 * (Longueur + Largeur);
+    public override double GetAire() => Longueur * Largeur;
 }

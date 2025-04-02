@@ -32,6 +32,10 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
         <PackageReference Include="ThomSoft.Microsoft.EntityFrameworkCore.AuditTrail" Version="2.0.1" />
+      
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Shared\Shared.csproj" />
         <ProjectReference Include="..\EzChess\EzChess.csproj" />
     </ItemGroup>
 
@@ -40,6 +44,7 @@
       <Compile Remove="Models\DTOs\CercleDTO.cs" />
       <Compile Remove="Models\DTOs\RectangleDTO.cs" />
       <Compile Remove="Models\DTOs\TriangleDTO.cs" />
+      <Compile Remove="Data\ApplicationDbContext.cs" />
     </ItemGroup>
 
    

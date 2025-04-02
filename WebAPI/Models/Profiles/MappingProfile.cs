@@ -1,6 +1,6 @@
 using AutoMapper;
 using WebAPI.Models.DTOs;
-using EzChess.forme; 
+using Shared.forme; 
 
 namespace WebAPI.Models.Profiles
 {

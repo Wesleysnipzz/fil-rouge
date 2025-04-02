@@ -1,17 +1,15 @@
 namespace Shared.forme;
 
-public class Triangle(double cote, string position) : Forme(9)
+public class Triangle : Forme
 {
-    public double Cote { get; set; } = cote;
+    public double Cote { get; set; }
 
-
-    public override double GetPerimetre()
+    public Triangle(double cote, string position) : base(9)
     {
-        return 3 * Cote;
+        Cote = cote;
+        this.position = position; // Affecte la propriété héritée
     }
 
-    public override double GetAire()
-    {
-        return (Math.Sqrt(3) / 4) * Cote * Cote;
-    }
+    public override double GetPerimetre() => 3 * Cote;
+    public override double GetAire() => (Math.Sqrt(3) / 4) * Cote * Cote;
 }

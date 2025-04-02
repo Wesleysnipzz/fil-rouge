@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{E1C60A1E-3979-4DD2-B1C3-9C3D29ED62ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{AAF003C1-0E97-4B24-B057-C8703E5A1284}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{E1C60A1E-3979-4DD2-B1C3-9C3D29ED62ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1C60A1E-3979-4DD2-B1C3-9C3D29ED62ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1C60A1E-3979-4DD2-B1C3-9C3D29ED62ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF003C1-0E97-4B24-B057-C8703E5A1284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF003C1-0E97-4B24-B057-C8703E5A1284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF003C1-0E97-4B24-B057-C8703E5A1284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF003C1-0E97-4B24-B057-C8703E5A1284}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

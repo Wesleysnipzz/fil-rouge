@@ -1,8 +1,10 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using EzChess.forme;
+using Shared.Data;
+using Shared.forme;
 using WebAPI.Models.DTOs;
-using WebAPI.Data;
+
+
 
 namespace WebAPI.Controllers
 {
@@ -19,17 +21,7 @@ namespace WebAPI.Controllers
             _logger = logger;
             _mapper = mapper;
             _context = context;
-/*
-            // Initialisation en base si vide
-            if (!_context.Formes.Any())
-            {
-                _context.Formes.Add(new Carre(5));
-                _context.Formes.Add(new Rectangle(6, 4));
-                _context.Formes.Add(new Cercle(3));
-                _context.Formes.Add(new Triangle(5));
-                _context.SaveChanges();
-            }
-//*/        }
+        }
 
         [HttpGet]
         public IActionResult GetForms()
