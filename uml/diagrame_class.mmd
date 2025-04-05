@@ -1,58 +1,57 @@
 classDiagram
-    class Forme {
-        - int Valeur
-        + Forme(int valeur)
-        + GetValeur() int
-        + GetPerimetre() double
-        + GetAire() double
-    }
-
-    class Triangle {
-        Getter ; Setter
-        + Triangle(double cote)
-        + GetPerimetre() double
-        + GetAire() double
-    }
-
-    class Cercle {
-        Getter ; Setter
-        + Cercle(double rayon)
-        + GetPerimetre() double
-        + GetAire() double
-    }
-
-    class Carre {
-        Getter ; Setter
-        + Carre(double cote)
-        + GetPerimetre() double
-        + GetAire() double
-    }
-
-    class Rectangle {
-        Getter  ; Setter
-        + double Longueur
-        + double Largeur
-        + Rectangle(double l, double L)
-        + GetPerimetre() double
-        + GetAire() double
-    }
-
-    class ChessBoard {
-        - List~Forme~ _mesFormes
-        + ChessBoard()
-        + AjouterForme(Forme)
-        + AfficherFormes()
-    }
-
-%% Héritage des formes
-    Forme <|-- Triangle
-    Forme <|-- Cercle
-    Forme <|-- Carre
-    Forme <|-- Rectangle
-
-%% Relation de composition entre ChessBoard et Forme
-    ChessBoard "1" *-- "0..*" Forme
-
-%% Notes explicatives
-    note for ChessBoard "Classe gérant une collection de formes géométriques."
-    note for Forme "Classe abstraite servant de base aux formes géométriques."
+            class Forme {
+                - int Valeur
+                - string position
+                + Forme(int valeur)
+                + GetValeur() int
+                + GetPerimetre() double
+                + GetAire() double
+            }
+        
+            class Triangle {
+                Getter ; Setter
+                + Triangle(double cote)
+                + GetPerimetre() double
+                + GetAire() double
+            }
+        
+            class Cercle {
+                Getter ; Setter
+                + Cercle(double rayon)
+                + GetPerimetre() double
+                + GetAire() double
+            }
+        
+            class Carre {
+                Getter ; Setter
+                + Carre(double cote)
+                + GetPerimetre() double
+                + GetAire() double
+            }
+        
+            class Rectangle {
+                Getter ; Setter
+                + double Longueur
+                + double Largeur
+                + Rectangle(double l, double L)
+                + GetPerimetre() double
+                + GetAire() double
+            }
+        
+            class GameManager {
+                + GameManager(ApplicationDbContext, ILogger)
+                + PlacerForme(string, Forme) bool
+                + ModifierForme(string, Forme) bool
+                + SupprimerForme(string) bool
+                + ObtenirEchiquier() Dictionary~string, object~
+            }
+        
+            Forme <|-- Triangle
+            Forme <|-- Cercle
+            Forme <|-- Carre
+            Forme <|-- Rectangle
+        
+            GameManager "1" *-- "0..*" Forme
+        
+            note for Forme "Classe abstraite servant de base aux formes géométriques, incluant la propriété position."
+            note for GameManager "Gère le placement, modification et suppression des formes."

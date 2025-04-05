@@ -14,6 +14,14 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
 });
+// Configuration CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost3000",
+        builder => builder.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
 
 // Enregistrer AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -44,6 +52,7 @@ if (app.Environment.IsDevelopment())
 if (!app.Environment.IsDevelopment())
 {
 }
+app.UseCors("AllowLocalhost3000");
 
 app.UseRouting();
 app.UseAuthorization();

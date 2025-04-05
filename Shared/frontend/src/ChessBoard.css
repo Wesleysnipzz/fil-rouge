@@ -1,0 +1,65 @@
+.chessboard-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(8, 60px);
+    gap: 0;
+    margin: 0 auto;
+    border: 2px solid #333;
+}
+
+.chess-square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.light {
+    background-color: #f0d9b5;
+}
+
+.dark {
+    background-color: #b58863;
+}
+
+.shape {
+    width: 40px;
+    height: 40px;
+}
+
+/* Formes */
+.cercle {
+    border-radius: 50%;
+    background-color: #3498db;
+}
+
+.carre {
+    background-color: #e74c3c;
+}
+
+.triangle {
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 35px solid #2ecc71;
+    background: none;
+}
+
+.rectangle {
+    width: 40px;
+    height: 25px;
+    background-color: #9b59b6;
+}
+
+.vide {
+    background-color: transparent;
+}
