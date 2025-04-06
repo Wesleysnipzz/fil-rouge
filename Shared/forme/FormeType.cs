@@ -1,10 +1,12 @@
-namespace Shared.forme
+namespace Shared.forme;
+
+
+    // Enumération pour les types de formes;
+
+public enum FormeType
 {
-    public enum FormeType
-    {
-        Carre,
-        Rectangle,
-        Triangle,
-        Cercle
-    }
+    Carre,
+    Rectangle,
+    Triangle,
+    Cercle
 }

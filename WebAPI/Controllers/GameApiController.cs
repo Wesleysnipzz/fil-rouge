@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Models.DTOs;
 using Shared.forme;
-using Shared.Data;
-using System.Collections.Generic;
+
 
 namespace WebAPI.Controllers
 {

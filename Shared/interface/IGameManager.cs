@@ -1,3 +1,4 @@
+
 using Shared.forme;
 
 namespace Shared.Interface
@@ -7,6 +8,6 @@ namespace Shared.Interface
         bool PlacerForme(string position, Forme forme);
         bool ModifierForme(string position, Forme nouvelleForme);
         bool SupprimerForme(string position);
-        List<Forme> ObtenirEchiquier();
+        Dictionary<string, object> ObtenirEchiquier();
     }
 }
