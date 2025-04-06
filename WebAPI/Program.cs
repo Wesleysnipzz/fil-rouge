@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WebAPI.Models.Profiles;
 using Shared.Data;
 using Shared.forme; // Pour accéder à GameManager
+using Shared.Interface; // Ajout de l'importation manquante
 using Microsoft.Extensions.Logging; // Pour les logs
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,7 +30,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Enregistrement de GameManager pour injection de dépendances
-builder.Services.AddScoped<GameManager>();
+builder.Services.AddScoped<IGameManager, GameManager>();
 
 // Ajouter la configuration des logs
 builder.Logging.ClearProviders();
@@ -60,7 +61,7 @@ app.MapControllers();
 app.UseHttpsRedirection();
 
 // Permet à l'API d'écouter sur toutes les interfaces réseau
-app.Run("http://0.0.0.0:5106");
+app.Run();  //("http://0.0.0.0:5106");
 
 // Contrôleur de test pour vérifier que l'API fonctionne
 app.MapGet("/api/test", () => new { message = "API is working!" });

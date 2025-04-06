@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Models.DTOs;
 using Shared.forme;
-
+using Shared.Interface;
 
 namespace WebAPI.Controllers
 {
@@ -10,9 +10,9 @@ namespace WebAPI.Controllers
     public class GameApiController : ControllerBase
     {
         private readonly ILogger<GameApiController> _logger;
-        private readonly GameManager _gameManager;
+        private readonly IGameManager _gameManager;
 
-        public GameApiController(ILogger<GameApiController> logger, GameManager gameManager)
+        public GameApiController(ILogger<GameApiController> logger, IGameManager gameManager)
         {
             _logger = logger;
             _gameManager = gameManager;
