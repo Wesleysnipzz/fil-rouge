@@ -22,17 +22,46 @@ namespace Shared.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Shared.forme.Board", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Boards", (string)null);
+                });
+
             modelBuilder.Entity("Shared.forme.Forme", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("BoardId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("position")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BoardId");
 
                     b.ToTable("Formes", (string)null);
 
@@ -80,6 +109,15 @@ namespace Shared.Migrations
                         .HasColumnType("double precision");
 
                     b.ToTable("Triangles", (string)null);
+                });
+
+            modelBuilder.Entity("Shared.forme.Forme", b =>
+                {
+                    b.HasOne("Shared.forme.Board", null)
+                        .WithMany()
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Shared.forme.Carre", b =>

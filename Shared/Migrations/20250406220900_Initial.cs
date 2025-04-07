@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -12,15 +13,37 @@ namespace Shared.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Boards",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Boards", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Formes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    position = table.Column<string>(type: "text", nullable: false)
+                    position = table.Column<string>(type: "text", nullable: false),
+                    BoardId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Formes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Formes_Boards_BoardId",
+                        column: x => x.BoardId,
+                        principalTable: "Boards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,6 +118,11 @@ namespace Shared.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Formes_BoardId",
+                table: "Formes",
+                column: "BoardId");
         }
 
         /// <inheritdoc />
@@ -114,6 +142,9 @@ namespace Shared.Migrations
 
             migrationBuilder.DropTable(
                 name: "Formes");
+
+            migrationBuilder.DropTable(
+                name: "Boards");
         }
     }
 }

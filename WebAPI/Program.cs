@@ -37,6 +37,37 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 var app = builder.Build();
+// Initialisation de la base de données avec un échiquier par défaut
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        
+        // Vérifier si des boards existent déjà
+        if (!context.Boards.Any())
+        {
+            // Créer au moins un échiquier par défaut
+            context.Boards.Add(new Board
+            {
+                Id = 1,
+                Name = "Échiquier principal",
+                Type = "standard",
+                CreatedAt = DateTime.Now
+            });
+            context.SaveChanges();
+            
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("Base de données initialisée avec un échiquier par défaut");
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Une erreur s'est produite lors de l'initialisation de la base de données");
+    }
+}
 
 // Configuration du pipeline HTTP
 if (app.Environment.IsDevelopment())

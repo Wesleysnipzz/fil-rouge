@@ -5,6 +5,7 @@ public abstract class Forme
     public Guid Id { get; set; } = Guid.NewGuid();
     public string position { get; set; } = "ValeurProvisoire";
     private int Valeur { get; set; } = default!;
+    public int BoardId { get; set; } = 1; // Par défaut, l'échiquier 1
 
     protected Forme(int valeur)
     {

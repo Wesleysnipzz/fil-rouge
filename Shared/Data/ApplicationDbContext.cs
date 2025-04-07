@@ -11,6 +11,7 @@ namespace Shared.Data
         public DbSet<Rectangle> Rectangles { get; set; }
         public DbSet<Triangle> Triangles { get; set; }
         public DbSet<Carre> Carres { get; set; }
+        public DbSet<Board> Boards { get; set; }
 
         // Constructeur pour l'injection de dépendances
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -36,6 +37,13 @@ namespace Shared.Data
             modelBuilder.Entity<Rectangle>().ToTable("Rectangles");
             modelBuilder.Entity<Triangle>().ToTable("Triangles");
             modelBuilder.Entity<Cercle>().ToTable("Cercles");
+            modelBuilder.Entity<Board>().ToTable("Boards");
+            
+            // Configuration correcte de la relation Board-Forme
+            modelBuilder.Entity<Forme>()
+                .HasOne<Board>()
+                .WithMany()
+                .HasForeignKey(f => f.BoardId);
         }
     }
 }
