@@ -1,47 +1,42 @@
+// src/ChessBoard.tsx
 import React, { useEffect, useState } from "react";
-import { Cercle, Carre, Rectangle, Triangle } from './GeometricShapes'; // Importer les formes géométriques
+import { Cercle, Carre, Rectangle, Triangle } from './GeometricShapes';
+import { FormeBase, Board } from './types/shapes';
+import { getBoard, getForms } from './services/api';
 import "./ChessBoard.css";
 
+type FormesMap = Map<string, FormeBase | null>;
+
 function ChessBoard() {
-    const [board, setBoard] = useState({});
-    const [formesMap, setFormesMap] = useState(new Map());
-    const [loading, setLoading] = useState(true);
+    const [board, setBoard] = useState<Board | null>(null);
+    const [formesMap, setFormesMap] = useState<FormesMap>(new Map());
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         setLoading(true);
 
-        // Récupérer l'échiquier et les formes en parallèle
-        Promise.all([
-            fetch("http://localhost:5106/api/game/board").then(res => res.json()),
-            fetch("http://localhost:5106/Formes").then(res => res.json())
-        ])
+        Promise.all([getBoard(), getForms()])
             .then(([boardData, formesData]) => {
-                console.log("Board récupéré :", boardData);
-                console.log("Formes récupérées :", formesData);
-
                 setBoard(boardData);
 
-                // Map rapide pour associer position -> forme (ex: "A1" -> forme Cercle)
                 const formesMap = new Map(
                     formesData.map(f => {
-                        let forme;
+                        let forme: FormeBase | null = null;
                         switch (f.type?.toLowerCase()) {
                             case "cercle":
-                                forme = new Cercle(f.rayon); // f.rayon doit être passé en paramètre
+                                forme = new Cercle(f.rayon, f.position, f.boardId);
                                 break;
                             case "carre":
-                                forme = new Carre(f.cote); // f.cote pour le carré
+                                forme = new Carre(f.cote, f.position, f.boardId);
                                 break;
                             case "rectangle":
-                                forme = new Rectangle(f.longueur, f.largeur); // f.longueur et f.largeur
+                                forme = new Rectangle(f.longueur, f.largeur, f.position, f.boardId);
                                 break;
                             case "triangle":
-                                forme = new Triangle(f.base, f.hauteur); // f.base et f.hauteur
+                                forme = new Triangle(f.base, f.hauteur, f.position, f.boardId);
                                 break;
-                            default:
-                                forme = null; // Si aucune forme correspondante
                         }
-                        return [f.position, forme]; // Associer position -> forme
+                        return [f.position, forme];
                     })
                 );
                 setFormesMap(formesMap);
@@ -56,9 +51,9 @@ function ChessBoard() {
         <div className="chessboard-container">
             <h2>Ez Chess</h2>
             <div className="chessboard">
-                {Object.keys(board).map((position, index) => {
-                    const forme = formesMap.get(position); // Récupérer la forme pour chaque position
-                    const type = forme ? forme.constructor.name : "vide"; // Récupérer le type de la forme
+                {board && Object.keys(board).map((position, index) => {
+                    const forme = formesMap.get(position);
+                    const type = forme ? forme.constructor.name : "vide";
 
                     return (
                         <div

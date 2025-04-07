@@ -1,53 +1,124 @@
 .chessboard-container {
-  text-align: center;
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto;
+  max-width: 600px;
 }
 
 h2 {
-  font-size: 2rem;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Georgia', serif;
+  font-size: 2.2rem;
   margin-bottom: 20px;
+  color: #333;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
 .chessboard {
   display: grid;
-  grid-template-columns: repeat(8, 60px); /* 8 colonnes de 60px */
-  grid-template-rows: repeat(8, 60px); /* 8 lignes de 60px */
-  gap: 1px; /* Un petit écart entre les cases */
-  margin: 0 auto;
-  width: 500px; /* Largeur de l'échiquier */
-  height: 500px; /* Hauteur de l'échiquier */
-  border: 2px solid #333; /* Bordure autour de l'échiquier */
+  grid-template-columns: repeat(8, 70px);
+  grid-template-rows: repeat(8, 70px);
+  gap: 0;
+  border: 4px solid #8B4513;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  position: relative;
 }
 
 .chess-square {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  height: 100%;
-  width: 100%;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-/* Couleurs alternées des cases */
-.chess-square.light {
-  background-color: #ece8e3; /* Case claire */
+.light {
+  background-color: #f0d9b5;
 }
 
-.chess-square.dark {
-  background-color: #b58863; /* Case sombre */
+.dark {
+  background-color: #b58863;
 }
 
-/* Hover effect pour les cases */
 .chess-square:hover {
-  background-color: #af0d0d;
+  filter: brightness(1.1);
+  cursor: pointer;
 }
 
-/* Styles pour le texte (Cercle, Triangle, etc.) */
-.chess-square span {
-  color: #333;
-  text-transform: capitalize;
-  font-family: 'Arial', sans-serif;
+.shape {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shape:hover {
+  transform: scale(1.1);
+}
+
+.cercle {
+  border-radius: 50%;
+  background-color: rgba(52, 152, 219, 0.8);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.carre {
+  background-color: rgba(231, 76, 60, 0.8);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 43px solid rgba(46, 204, 113, 0.8);
+  background: none;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.rectangle {
+  width: 45px;
+  height: 30px;
+  background-color: rgba(155, 89, 182, 0.8);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.form-info {
+  position: absolute;
+  bottom: 2px;
+  font-size: 8px;
+  color: rgba(0,0,0,0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chess-square:hover .form-info {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .chessboard {
+    grid-template-columns: repeat(8, 40px);
+    grid-template-rows: repeat(8, 40px);
+  }
+  
+  .shape {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .triangle {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 26px solid rgba(46, 204, 113, 0.8);
+  }
+  
+  .rectangle {
+    width: 25px;
+    height: 18px;
+  }
 }
