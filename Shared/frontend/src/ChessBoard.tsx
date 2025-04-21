@@ -1,84 +1,164 @@
 // src/ChessBoard.tsx
 import React, { useEffect, useState } from "react";
-import { Cercle, Carre, Rectangle, Triangle } from './GeometricShapes';
-import { FormeBase, Board } from './types/shapes';
-import { getBoard, getForms } from './services/api';
+import axios from 'axios';
 import "./ChessBoard.css";
 
-type FormesMap = Map<string, FormeBase | null>;
+const API_URL = 'http://localhost:5106/api';
+
+// Fonction pour récupérer l'échiquier avec les formes placées
+async function getBoard(boardId: number = 1) {
+  try {
+    // Récupérer la structure de l'échiquier avec les formes
+    const response = await axios.get(`${API_URL}/game/board?boardId=${boardId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'échiquier:", error);
+    throw error;
+  }
+}
+
+// Fonction pour récupérer la liste des échiquiers
+async function getAllBoards() {
+  try {
+    const response = await axios.get(`${API_URL}/game/boards`);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des échiquiers:", error);
+    return [];
+  }
+}
+
+// Type pour représenter l'échiquier
+type ChessBoardData = {
+  [position: string]: string | null;
+};
+
+// Type pour les échiquiers disponibles
+type BoardItem = {
+  id: number;
+  name: string;
+  type: string;
+  createdAt: string;
+};
 
 function ChessBoard() {
-    const [board, setBoard] = useState<Board | null>(null);
-    const [formesMap, setFormesMap] = useState<FormesMap>(new Map());
-    const [loading, setLoading] = useState<boolean>(true);
+  const [boardData, setBoardData] = useState<ChessBoardData>({});
+  const [boards, setBoards] = useState<BoardItem[]>([]);
+  const [selectedBoardId, setSelectedBoardId] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        setLoading(true);
+  // Fonction pour générer les coordonnées de l'échiquier
+  const generateChessPositions = () => {
+    const positions: string[] = [];
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        positions.push(`${letters[j]}${8 - i}`);
+      }
+    }
+    
+    return positions;
+  };
 
-        Promise.all([getBoard(), getForms()])
-            .then(([boardData, formesData]) => {
-                setBoard(boardData);
+  // Chargement de l'échiquier
+  const loadBoard = async (boardId: number) => {
+    try {
+      setLoading(true);
+      setError(null);
+      // Récupérer les données directement de l'API sans transformation
+      const data = await getBoard(boardId);
+      console.log('Données de l\'échiquier reçues :', data);
+      setBoardData(data);
+    } catch (err) {
+      setError("Erreur lors du chargement de l'échiquier");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                const formesMap = new Map(
-                    formesData.map(f => {
-                        let forme: FormeBase | null = null;
-                        switch (f.type?.toLowerCase()) {
-                            case "cercle":
-                                forme = new Cercle(f.rayon, f.position, f.boardId);
-                                break;
-                            case "carre":
-                                forme = new Carre(f.cote, f.position, f.boardId);
-                                break;
-                            case "rectangle":
-                                forme = new Rectangle(f.longueur, f.largeur, f.position, f.boardId);
-                                break;
-                            case "triangle":
-                                forme = new Triangle(f.base, f.hauteur, f.position, f.boardId);
-                                break;
-                        }
-                        return [f.position, forme];
-                    })
-                );
-                setFormesMap(formesMap);
-            })
-            .catch(error => console.error("Erreur lors de la récupération des données :", error))
-            .finally(() => setLoading(false));
-    }, []);
+  // Chargement des échiquiers disponibles
+  const loadBoards = async () => {
+    try {
+      const data = await getAllBoards();
+      setBoards(data);
+    } catch (err) {
+      console.error("Erreur lors du chargement des échiquiers:", err);
+    }
+  };
 
-    if (loading) return <p>Chargement de l'échiquier...</p>;
+  // Changement d'échiquier
+  const handleBoardChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const boardId = parseInt(event.target.value);
+    setSelectedBoardId(boardId);
+    loadBoard(boardId);
+  };
 
+  // Effet pour charger les données au montage du composant
+  useEffect(() => {
+    Promise.all([loadBoard(selectedBoardId), loadBoards()]);
+  }, []);
+
+  // Rendu d'une forme géométrique basé uniquement sur le type
+  const renderShape = (type: string | null) => {
+    if (!type) return null;
+    
+    // Utiliser directement le type renvoyé par l'API
+    const lowerType = type.toLowerCase();
+    
     return (
-        <div className="chessboard-container">
-            <h2>Ez Chess</h2>
-            <div className="chessboard">
-                {board && Object.keys(board).map((position, index) => {
-                    const forme = formesMap.get(position);
-                    const type = forme ? forme.constructor.name : "vide";
-
-                    return (
-                        <div
-                            key={position}
-                            className={`chess-square ${(Math.floor(index / 8) + (index % 8)) % 2 === 0 ? "light" : "dark"}`}
-                        >
-                            <div className={`shape ${type.toLowerCase()}`} title={type}>
-                                {forme && type === "Cercle" && <div className="cercle" />}
-                                {forme && type === "Carre" && <div className="carre" />}
-                                {forme && type === "Triangle" && <div className="triangle" />}
-                                {forme && type === "Rectangle" && <div className="rectangle" />}
-                            </div>
-                            <div className="form-info">
-                                {forme && (
-                                    <span>
-                                        Aire: {forme.getAire().toFixed(2)} | Périmètre: {forme.getPerimetre().toFixed(2)}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
+      <div className={`shape ${lowerType}`} title={type}>
+        <div className={lowerType}></div>
+      </div>
     );
+  };
+
+  if (loading) return <div className="loading">Chargement de l'échiquier...</div>;
+  if (error) return <div className="error">{error}</div>;
+
+  const positions = generateChessPositions();
+
+  return (
+    <div className="chessboard-container">
+      <div className="board-selector">
+        <label htmlFor="board-select">Choisir un échiquier: </label>
+        <select 
+          id="board-select" 
+          value={selectedBoardId} 
+          onChange={handleBoardChange}
+        >
+          {boards.map(board => (
+            <option key={board.id} value={board.id}>
+              {board.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="chessboard">
+        {positions.map((position, index) => {
+          const row = Math.floor(index / 8);
+          const col = index % 8;
+          const isLight = (row + col) % 2 === 0;
+          // Récupérer directement le type de forme à cette position
+          const forme = boardData[position];
+
+          return (
+            <div 
+              key={position} 
+              className={`chess-square ${isLight ? "light" : "dark"}`}
+              data-position={position}
+            >
+              {renderShape(forme)}
+              <div className="position-label">{position}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default ChessBoard;
