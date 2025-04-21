@@ -1,16 +1,45 @@
-version: "3.8"
 services:
   db:
-    image: postgres
-    container_name: local_pgdb
-    restart: always
-    ports:
-      - "10000:5432"
+    image: postgres:15-alpine
+    container_name: ezchess_db
     environment:
       POSTGRES_USER: ezchess
       POSTGRES_PASSWORD: 123
+      POSTGRES_DB: chess
+    ports:
+      - "10000:5432"
     volumes:
-      - local_pgdata:/var/lib/postgresql/data
-  
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ezchess -d chess"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: WebAPI/Dockerfile
+    container_name: ezchess_api
+    ports:
+      - "5106:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=chess;Username=ezchess;Password=123
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./Shared/frontend
+      dockerfile: Dockerfile
+    container_name: ezchess_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
 volumes:
-  local_pgdata:
+  postgres_data:

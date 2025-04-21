@@ -22,7 +22,7 @@ namespace Shared.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Shared.forme.Board", b =>
+            modelBuilder.Entity("Board", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -113,7 +113,7 @@ namespace Shared.Migrations
 
             modelBuilder.Entity("Shared.forme.Forme", b =>
                 {
-                    b.HasOne("Shared.forme.Board", null)
+                    b.HasOne("Board", null)
                         .WithMany()
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)

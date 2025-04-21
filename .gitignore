@@ -51,3 +51,4 @@ ScaffoldingReadMe.txt
 *.tlog
 *.bak
 *.swp
+node_modules/
