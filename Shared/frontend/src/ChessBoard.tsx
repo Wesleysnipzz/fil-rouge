@@ -28,6 +28,17 @@ async function getAllBoards() {
   }
 }
 
+// Fonction pour créer un nouvel échiquier
+async function createBoard(name: string, type: string = 'standard') {
+  try {
+    const response = await axios.post(`${API_URL}/game/board`, { name, type });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la création de l'échiquier:", error);
+    throw error;
+  }
+}
+
 // Type pour représenter l'échiquier
 type ChessBoardData = {
   [position: string]: string | null;
@@ -47,6 +58,8 @@ function ChessBoard() {
   const [selectedBoardId, setSelectedBoardId] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [newBoardName, setNewBoardName] = useState<string>("");
+  const [creatingBoard, setCreatingBoard] = useState<boolean>(false);
 
   // Fonction pour générer les coordonnées de l'échiquier
   const generateChessPositions = () => {
@@ -96,6 +109,45 @@ function ChessBoard() {
     loadBoard(boardId);
   };
 
+  // Création d'un nouvel échiquier
+  const handleCreateBoard = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!newBoardName.trim()) return;
+    
+    try {
+      setCreatingBoard(true);
+      await createBoard(newBoardName);
+      setNewBoardName("");
+      await loadBoards(); // Recharger la liste des échiquiers
+    } catch (err) {
+      console.error("Erreur lors de la création de l'échiquier:", err);
+    } finally {
+      setCreatingBoard(false);
+    }
+  };
+
+  // Création rapide d'un échiquier de test
+  const createTestBoard = async () => {
+    try {
+      setCreatingBoard(true);
+      const testBoardName = "Échiquier-test-" + new Date().getTime();
+      console.log("Création d'un échiquier de test:", testBoardName);
+      const newBoard = await createBoard(testBoardName);
+      console.log("Nouvel échiquier créé:", newBoard);
+      await loadBoards(); // Recharger la liste des échiquiers
+      
+      // Sélectionner automatiquement le nouvel échiquier créé
+      if (newBoard && newBoard.id) {
+        setSelectedBoardId(newBoard.id);
+        loadBoard(newBoard.id);
+      }
+    } catch (err) {
+      console.error("Erreur lors de la création de l'échiquier de test:", err);
+    } finally {
+      setCreatingBoard(false);
+    }
+  };
+
   // Effet pour charger les données au montage du composant
   useEffect(() => {
     Promise.all([loadBoard(selectedBoardId), loadBoards()]);
@@ -122,19 +174,44 @@ function ChessBoard() {
 
   return (
     <div className="chessboard-container">
-      <div className="board-selector">
-        <label htmlFor="board-select">Choisir un échiquier: </label>
-        <select 
-          id="board-select" 
-          value={selectedBoardId} 
-          onChange={handleBoardChange}
-        >
-          {boards.map(board => (
-            <option key={board.id} value={board.id}>
-              {board.name}
-            </option>
-          ))}
-        </select>
+      <div className="board-controls">
+        <div className="board-selector">
+          <label htmlFor="board-select">Choisir un échiquier: </label>
+          <select 
+            id="board-select" 
+            value={selectedBoardId} 
+            onChange={handleBoardChange}
+          >
+            {boards.map(board => (
+              <option key={board.id} value={board.id}>
+                {board.name}
+              </option>
+            ))}
+          </select>
+          <button 
+            type="button" 
+            onClick={createTestBoard}
+            disabled={creatingBoard}
+            className="test-board-button"
+          >
+            Créer un échiquier de test
+          </button>
+        </div>
+        
+        <div className="board-creator">
+          <form onSubmit={handleCreateBoard}>
+            <input
+              type="text"
+              placeholder="Nom du nouvel échiquier"
+              value={newBoardName}
+              onChange={(e) => setNewBoardName(e.target.value)}
+              required
+            />
+            <button type="submit" disabled={creatingBoard || !newBoardName.trim()}>
+              {creatingBoard ? "Création..." : "Créer un échiquier"}
+            </button>
+          </form>
+        </div>
       </div>
 
       <div className="chessboard">
