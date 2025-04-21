@@ -161,9 +161,7 @@ function ChessBoard() {
     const lowerType = type.toLowerCase();
     
     return (
-      <div className={`shape ${lowerType}`} title={type}>
-        <div className={lowerType}></div>
-      </div>
+      <div className={`shape ${lowerType}`} title={type}></div>
     );
   };
 
