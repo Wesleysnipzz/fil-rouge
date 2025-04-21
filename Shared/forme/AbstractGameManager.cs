@@ -67,21 +67,13 @@ namespace Shared.forme
 
         public bool SupprimerForme(string position, int boardId = 1)
         {
-            // Conversion en minuscules pour la comparaison
-            string positionLower = position.ToLower();
-            
-            var forme = _context.Formes
-                .FirstOrDefault(f => f.position.ToLower() == positionLower && f.BoardId == boardId);
-                
+            position = position.ToUpperInvariant();
+            var forme = _context.Formes.FirstOrDefault(f => f.position == position && f.BoardId == boardId);
             if (forme == null)
-            {
-                _logger.LogWarning($"Aucune forme trouvée à la position {position} sur l'échiquier {boardId}.");
                 return false;
-            }
 
             _context.Formes.Remove(forme);
             _context.SaveChanges();
-            _logger.LogInformation($"Forme supprimée de la position {position} sur l'échiquier {boardId}.");
             return true;
         }
 
@@ -125,6 +117,12 @@ namespace Shared.forme
             _context.SaveChanges();
             
             return board;
+        }
+
+        public Forme ObtenirDetailsForme(string position, int boardId = 1)
+        {
+            position = position.ToUpperInvariant();
+            return _context.Formes.FirstOrDefault(f => f.position == position && f.BoardId == boardId);
         }
     }
 }

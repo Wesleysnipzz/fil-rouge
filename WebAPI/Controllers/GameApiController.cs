@@ -92,6 +92,39 @@ namespace WebAPI.Controllers
             return Ok(echiquier);
         }
 
+        [HttpGet("forme/{position}")]
+        public IActionResult ObtenirDetailsForme(string position, [FromQuery] int boardId = 1)
+        {
+            var forme = _gameManager.ObtenirDetailsForme(position, boardId);
+            if (forme == null)
+            {
+                _logger.LogWarning($"Aucune forme trouvée à la position {position} sur l'échiquier {boardId}.");
+                return NotFound($"Aucune forme à la position {position} sur l'échiquier {boardId}.");
+            }
+            
+            _logger.LogInformation($"Détails de la forme à la position {position} sur l'échiquier {boardId} demandés.");
+            
+            // Créer un objet anonyme avec les propriétés de la forme selon son type
+            if (forme is Carre carre)
+            {
+                return Ok(new { Cote = carre.Cote });
+            }
+            else if (forme is Rectangle rectangle)
+            {
+                return Ok(new { Longueur = rectangle.Longueur, Largeur = rectangle.Largeur });
+            }
+            else if (forme is Triangle triangle)
+            {
+                return Ok(new { Cote = triangle.Cote });
+            }
+            else if (forme is Cercle cercle)
+            {
+                return Ok(new { Rayon = cercle.Rayon });
+            }
+            
+            return Ok(new {});
+        }
+
         [HttpGet("boards")]
         public IActionResult GetAllBoards()
         {

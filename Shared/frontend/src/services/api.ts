@@ -31,7 +31,33 @@ export async function getFormeDetails(position: string, boardId: number = 1) {
 export async function getAllBoards() {
   try {
     const response = await axios.get(`${API_URL}/game/boards`);
-    return response.data;
+    
+    // Vérifier si la réponse est bien un tableau
+    if (response.data === null || response.data === undefined) {
+      console.warn("La réponse de l'API est null ou undefined");
+      return [];
+    }
+    
+    // Log pour déboguer
+    console.log("Réponse de l'API getAllBoards:", response.data);
+    console.log("Type de la réponse:", typeof response.data);
+    
+    // Vérifier si c'est un tableau, sinon tenter de convertir
+    if (Array.isArray(response.data)) {
+      return response.data;
+    } else if (typeof response.data === 'object') {
+      console.warn("La réponse n'est pas un tableau, tentative de conversion");
+      const asArray = [];
+      for (const key in response.data) {
+        if (response.data.hasOwnProperty(key)) {
+          asArray.push(response.data[key]);
+        }
+      }
+      return asArray;
+    } else {
+      console.warn("La réponse n'est ni un tableau ni un objet:", response.data);
+      return [];
+    }
   } catch (error) {
     console.error("Erreur lors de la récupération des échiquiers:", error);
     return [];

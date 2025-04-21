@@ -39,9 +39,61 @@ async function createBoard(name: string, type: string = 'standard') {
   }
 }
 
+// Fonction pour récupérer les détails d'une forme
+async function getFormeDetails(position: string, boardId: number = 1) {
+  try {
+    const response = await axios.get(`${API_URL}/game/forme/${position}?boardId=${boardId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la récupération des détails de la forme à ${position}:`, error);
+    return null;
+  }
+}
+
+// Fonction pour récupérer l'échiquier avec les détails des formes
+async function getBoardWithDetails(boardId: number = 1) {
+  try {
+    const basicBoard = await getBoard(boardId);
+    const detailedBoard: {[position: string]: any} = {};
+    
+    // Pour chaque position avec une forme, récupérer ses détails
+    for (const position in basicBoard) {
+      if (basicBoard[position] !== null) {
+        try {
+          const details = await getFormeDetails(position, boardId);
+          detailedBoard[position] = {
+            type: basicBoard[position],
+            ...(details || {})
+          };
+        } catch {
+          detailedBoard[position] = { type: basicBoard[position] };
+        }
+      } else {
+        detailedBoard[position] = null;
+      }
+    }
+    
+    return detailedBoard;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des détails de l'échiquier:", error);
+    throw error;
+  }
+}
+
+// Type pour représenter les données d'une forme
+type FormeData = {
+  type: string;
+  cote?: number;
+  largeur?: number;
+  hauteur?: number;
+  rayon?: number;
+  base?: number;
+  [key: string]: any;
+};
+
 // Type pour représenter l'échiquier
 type ChessBoardData = {
-  [position: string]: string | null;
+  [position: string]: FormeData | null;
 };
 
 // Type pour les échiquiers disponibles
@@ -80,8 +132,9 @@ function ChessBoard() {
     try {
       setLoading(true);
       setError(null);
-      // Récupérer les données directement de l'API sans transformation
-      const data = await getBoard(boardId);
+      
+      // Récupérer toujours les données détaillées des formes
+      const data = await getBoardWithDetails(boardId);
       console.log('Données de l\'échiquier reçues :', data);
       setBoardData(data);
     } catch (err) {
@@ -96,9 +149,35 @@ function ChessBoard() {
   const loadBoards = async () => {
     try {
       const data = await getAllBoards();
-      setBoards(data);
+      console.log('Échiquiers reçus :', data);
+      
+      // Vérifier si data est bien un tableau
+      if (Array.isArray(data)) {
+        setBoards(data);
+      } else if (data && typeof data === 'object') {
+        // Si c'est un objet mais pas un tableau, on essaie de le convertir
+        console.warn('Les données reçues ne sont pas un tableau mais un objet :', data);
+        // Conversion manuelle de l'objet en tableau
+        const asArray = [];
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            asArray.push(data[key]);
+          }
+        }
+        if (asArray.length > 0) {
+          console.info('Conversion en tableau réussie :', asArray);
+          setBoards(asArray);
+        } else {
+          console.error('Impossible de convertir l\'objet en tableau');
+          setBoards([]);
+        }
+      } else {
+        console.error('Les données reçues ne sont ni un tableau ni un objet :', data);
+        setBoards([]);
+      }
     } catch (err) {
       console.error("Erreur lors du chargement des échiquiers:", err);
+      setBoards([]);
     }
   };
 
@@ -153,15 +232,101 @@ function ChessBoard() {
     Promise.all([loadBoard(selectedBoardId), loadBoards()]);
   }, []);
 
-  // Rendu d'une forme géométrique basé uniquement sur le type
-  const renderShape = (type: string | null) => {
-    if (!type) return null;
+  // Rendu d'une forme géométrique basé sur le type et les dimensions
+  const renderShape = (formeData: {type: string, [key: string]: any} | null) => {
+    if (!formeData) return null;
     
     // Utiliser directement le type renvoyé par l'API
-    const lowerType = type.toLowerCase();
+    const type = formeData.type.toLowerCase();
     
+    // Définir la taille maximale de l'espace disponible
+    const maxSize = 80; // en pixels
+    
+    // Dessiner la forme en SVG selon son type et ses dimensions
+    if (type === 'carre') {
+      const cote = formeData.cote || 5; // Valeur par défaut si non spécifiée
+      const size = Math.min(maxSize, cote * 10); // Échelle: 10px par unité
+      
+      return (
+        <svg width={maxSize} height={maxSize} viewBox={`0 0 ${maxSize} ${maxSize}`}>
+          <rect
+            x={(maxSize - size) / 2}
+            y={(maxSize - size) / 2}
+            width={size}
+            height={size}
+            fill="#f5f5f5"
+            stroke="#aaaaaa"
+            strokeWidth="1"
+          />
+        </svg>
+      );
+    }
+    
+    if (type === 'rectangle') {
+      const largeur = formeData.largeur || 5;
+      const hauteur = formeData.hauteur || 3;
+      const width = Math.min(maxSize, largeur * 10);
+      const height = Math.min(maxSize, hauteur * 10);
+      
+      return (
+        <svg width={maxSize} height={maxSize} viewBox={`0 0 ${maxSize} ${maxSize}`}>
+          <rect
+            x={(maxSize - width) / 2}
+            y={(maxSize - height) / 2}
+            width={width}
+            height={height}
+            fill="#333333"
+            stroke="none"
+          />
+        </svg>
+      );
+    }
+    
+    if (type === 'cercle') {
+      const rayon = formeData.rayon || 2.5;
+      const radius = Math.min(maxSize / 2, rayon * 10);
+      
+      return (
+        <svg width={maxSize} height={maxSize} viewBox={`0 0 ${maxSize} ${maxSize}`}>
+          <circle
+            cx={maxSize / 2}
+            cy={maxSize / 2}
+            r={radius}
+            fill="#f5f5f5"
+            stroke="#aaaaaa"
+            strokeWidth="1"
+          />
+        </svg>
+      );
+    }
+    
+    if (type === 'triangle') {
+      const base = formeData.base || 5;
+      const baseSize = Math.min(maxSize, base * 10);
+      const height = (Math.sqrt(3) / 2) * baseSize; // Triangle équilatéral
+      
+      // Calculer les points du triangle
+      const x1 = (maxSize - baseSize) / 2;
+      const y1 = (maxSize + height) / 2;
+      const x2 = x1 + baseSize;
+      const y2 = y1;
+      const x3 = maxSize / 2;
+      const y3 = (maxSize - height) / 2;
+      
+      return (
+        <svg width={maxSize} height={maxSize} viewBox={`0 0 ${maxSize} ${maxSize}`}>
+          <polygon
+            points={`${x1},${y1} ${x2},${y2} ${x3},${y3}`}
+            fill="#333333"
+            stroke="none"
+          />
+        </svg>
+      );
+    }
+    
+    // Forme non reconnue
     return (
-      <div className={`shape ${lowerType}`} title={type}></div>
+      <div className="unknown-shape" title={formeData.type}>?</div>
     );
   };
 

@@ -10,5 +10,6 @@ namespace Shared.Interface
         Dictionary<string, object> ObtenirEchiquier(int boardId = 1);
         List<Board> GetAllBoards();
         Board CreateBoard(string name, string type = "standard");
+        Forme ObtenirDetailsForme(string position, int boardId = 1);
     }
 }

@@ -1,7 +1,7 @@
 // src/App.tsx
 import React from "react";
 import "./App.css";
-import ChessBoard from "./ChessBoard.js";
+import ChessBoard from "./ChessBoard";
 
 const App: React.FC = () => {
   return (
