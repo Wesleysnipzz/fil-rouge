@@ -80,6 +80,28 @@ async function getBoardWithDetails(boardId: number = 1) {
   }
 }
 
+// Fonction pour ajouter une forme
+async function addForme(formeData: any) {
+  try {
+    const response = await axios.post(`${API_URL}/game/forme`, formeData);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de l'ajout de la forme:", error);
+    throw error;
+  }
+}
+
+// Fonction pour supprimer une forme
+async function deleteForme(position: string, boardId: number = 1) {
+  try {
+    const response = await axios.delete(`${API_URL}/game/forme/${position}?boardId=${boardId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la suppression de la forme à ${position}:`, error);
+    throw error;
+  }
+}
+
 // Type pour représenter les données d'une forme
 type FormeData = {
   type: string;
@@ -112,6 +134,11 @@ function ChessBoard() {
   const [error, setError] = useState<string | null>(null);
   const [newBoardName, setNewBoardName] = useState<string>("");
   const [creatingBoard, setCreatingBoard] = useState<boolean>(false);
+
+  // Nouveaux états pour le formulaire d'ajout de forme
+  const [showAddForm, setShowAddForm] = useState<{visible: boolean, position: string | null}>({visible: false, position: null});
+  const [addFormData, setAddFormData] = useState<any>({ type: 'carre', cote: 2 });
+  const [addingForme, setAddingForme] = useState<boolean>(false);
 
   // Fonction pour générer les coordonnées de l'échiquier
   const generateChessPositions = () => {
@@ -224,6 +251,47 @@ function ChessBoard() {
       console.error("Erreur lors de la création de l'échiquier de test:", err);
     } finally {
       setCreatingBoard(false);
+    }
+  };
+
+  // Handler pour afficher le formulaire d'ajout
+  const handleShowAddForm = (position: string) => {
+    setShowAddForm({ visible: true, position });
+    setAddFormData({ type: 'carre', cote: 2 });
+  };
+
+  // Handler pour cacher le formulaire
+  const handleHideAddForm = () => {
+    setShowAddForm({ visible: false, position: null });
+  };
+
+  // Handler pour soumettre le formulaire d'ajout
+  const handleAddForme = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!showAddForm.position) return;
+    setAddingForme(true);
+    try {
+      await addForme({
+        ...addFormData,
+        position: showAddForm.position,
+        boardId: selectedBoardId
+      });
+      await loadBoard(selectedBoardId);
+      handleHideAddForm();
+    } catch (err) {
+      // Optionnel: afficher une erreur
+    } finally {
+      setAddingForme(false);
+    }
+  };
+
+  // Handler pour supprimer une forme
+  const handleDeleteForme = async (position: string) => {
+    try {
+      await deleteForme(position, selectedBoardId);
+      await loadBoard(selectedBoardId);
+    } catch (err) {
+      // Optionnel: afficher une erreur
     }
   };
 
@@ -382,7 +450,6 @@ function ChessBoard() {
           const row = Math.floor(index / 8);
           const col = index % 8;
           const isLight = (row + col) % 2 === 0;
-          // Récupérer directement le type de forme à cette position
           const forme = boardData[position];
 
           return (
@@ -393,12 +460,58 @@ function ChessBoard() {
             >
               {renderShape(forme)}
               <div className="position-label">{position}</div>
+              {forme ? (
+                <button className="delete-forme-btn" onClick={() => handleDeleteForme(position)} title="Supprimer la forme">🗑️</button>
+              ) : (
+                <button className="add-forme-btn" onClick={() => handleShowAddForm(position)} title="Ajouter une forme">＋</button>
+              )}
             </div>
           );
         })}
       </div>
+      {/* Formulaire d'ajout de forme */}
+      {showAddForm.visible && (
+        <div className="add-forme-modal">
+          <form className="add-forme-form" onSubmit={handleAddForme}>
+            <h3>Ajouter une forme à {showAddForm.position}</h3>
+            <label>
+              Type:
+              <select value={addFormData.type} onChange={e => setAddFormData({ ...addFormData, type: e.target.value })}>
+                <option value="carre">Carré</option>
+                <option value="rectangle">Rectangle</option>
+                <option value="cercle">Cercle</option>
+                <option value="triangle">Triangle</option>
+              </select>
+            </label>
+            {/* Champs dynamiques selon le type */}
+            {addFormData.type === 'carre' && (
+              <label>Côté: <input type="number" min={1} value={addFormData.cote || ''} onChange={e => setAddFormData({ ...addFormData, cote: Number(e.target.value) })} required /></label>
+            )}
+            {addFormData.type === 'rectangle' && (
+              <>
+                <label>Largeur: <input type="number" min={1} value={addFormData.largeur || ''} onChange={e => setAddFormData({ ...addFormData, largeur: Number(e.target.value) })} required /></label>
+                <label>Hauteur: <input type="number" min={1} value={addFormData.hauteur || ''} onChange={e => setAddFormData({ ...addFormData, hauteur: Number(e.target.value) })} required /></label>
+              </>
+            )}
+            {addFormData.type === 'cercle' && (
+              <label>Rayon: <input type="number" min={1} value={addFormData.rayon || ''} onChange={e => setAddFormData({ ...addFormData, rayon: Number(e.target.value) })} required /></label>
+            )}
+            {addFormData.type === 'triangle' && (
+              <>
+                <label>Base: <input type="number" min={1} value={addFormData.base || ''} onChange={e => setAddFormData({ ...addFormData, base: Number(e.target.value) })} required /></label>
+                <label>Hauteur: <input type="number" min={1} value={addFormData.hauteur || ''} onChange={e => setAddFormData({ ...addFormData, hauteur: Number(e.target.value) })} required /></label>
+              </>
+            )}
+            <div className="form-actions">
+              <button type="submit" disabled={addingForme}>{addingForme ? "Ajout..." : "Ajouter"}</button>
+              <button type="button" onClick={handleHideAddForm}>Annuler</button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
 
 export default ChessBoard;
+
