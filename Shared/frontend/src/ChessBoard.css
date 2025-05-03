@@ -197,3 +197,71 @@
 .board-creator button:hover:not(:disabled) {
     background-color: #45a049;
 }
+.edit-forme-btn {
+    position: absolute;
+    top: 5px;
+    right: 25px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    opacity: 0.7;
+}
+.chessboard-interface {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.board-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    min-width: 200px;
+}
+
+.selected-position {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: #ececec;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.global-add-btn, .global-delete-btn {
+    padding: 12px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.global-add-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.global-delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.global-add-btn:disabled, .global-delete-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.chess-square {
+    cursor: pointer;
+}
+
+.chess-square.selected {
+    border: 2px solid yellow;
+}

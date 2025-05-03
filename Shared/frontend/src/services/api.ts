@@ -47,7 +47,7 @@ export async function getAllBoards() {
       return response.data;
     } else if (typeof response.data === 'object') {
       console.warn("La réponse n'est pas un tableau, tentative de conversion");
-      const asArray = [];
+      const asArray: any[] = [];
       for (const key in response.data) {
         if (response.data.hasOwnProperty(key)) {
           asArray.push(response.data[key]);
