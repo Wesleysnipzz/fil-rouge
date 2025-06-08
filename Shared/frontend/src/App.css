@@ -1,0 +1,158 @@
+.chessboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+h2 {
+  font-family: 'Georgia', serif;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.chessboard {
+  display: grid;
+  grid-template-columns: repeat(8, 70px);
+  grid-template-rows: repeat(8, 70px);
+  gap: 0;
+  border: 4px solid #8B4513;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.chess-square {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.light {
+  background-color: #f0d9b5;
+}
+
+.dark {
+  background-color: #b58863;
+}
+
+.chess-square:hover {
+  filter: brightness(1.1);
+  cursor: pointer;
+}
+
+.shape {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shape:hover {
+  transform: scale(1.1);
+}
+
+.cercle {
+  border-radius: 50%;
+  background-color: rgba(52, 152, 219, 0.8);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.carre {
+  background-color: rgba(231, 76, 60, 0.8);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 43px solid rgba(46, 204, 113, 0.8);
+  background: none;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.rectangle {
+  width: 45px;
+  height: 30px;
+  background-color: rgba(155, 89, 182, 0.8);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.form-info {
+  position: absolute;
+  bottom: 2px;
+  font-size: 8px;
+  color: rgba(0,0,0,0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chess-square:hover .form-info {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .chessboard {
+    grid-template-columns: repeat(8, 40px);
+    grid-template-rows: repeat(8, 40px);
+  }
+  
+  .shape {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .triangle {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 26px solid rgba(46, 204, 113, 0.8);
+  }
+  
+  .rectangle {
+    width: 25px;
+    height: 18px;
+  }
+}
+
+.App {
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.App-header {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #2c3e50;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+}
+
+main {
+  margin-bottom: 40px;
+}
+
+.App-footer {
+  margin-top: 30px;
+  padding: 15px;
+  color: #666;
+  border-top: 1px solid #eee;
+  font-size: 0.9rem;
+}
